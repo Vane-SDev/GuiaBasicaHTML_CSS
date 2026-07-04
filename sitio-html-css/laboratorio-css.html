@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio CSS · Box Model, Flexbox, Pseudoclases y Medidas</title>
+<link rel="stylesheet" href="estilos-base.css">
+<style>
+
+:root{
+  
+  --c-margin:  #f9cc9d;   /* naranja: margin en DevTools */
+  --c-padding: #c3d08b;   /* verde: padding en DevTools */
+  --c-content: #9fc4e7;   /* azul: contenido en DevTools */
+  --codigo-prop:#8ec9ff;  /* propiedades en el código de ejemplo */
+}
+
+
+
+header.principal h1{
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: -0.02em;
+}
+header.principal h1 .caja-titulo{
+  display: inline-block;
+  border: 3px dashed var(--c-border);
+  background: rgba(255,255,255,.06);
+  padding: .2em .5em;
+  border-radius: 8px;
+}
+
+nav.menu{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid var(--linea);
+  display: flex;            
+  justify-content: center;
+  gap: .5rem;
+  padding: .6rem 1rem;
+  flex-wrap: wrap;
+}
+nav.menu a{
+  text-decoration: none;
+  color: var(--tinta-suave);
+  font-weight: 600;
+  font-size: .95rem;
+  padding: .45rem .9rem;
+  border-radius: 999px;
+  transition: background .15s, color .15s;
+}
+nav.menu a:hover{              
+  background: var(--acento);
+  color: #fff;
+}
+
+main{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+
+section.bloque{
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 1.8rem 1.5rem;
+  margin-top: 2.2rem;
+  scroll-margin-top: 4.5rem;   
+}
+section.bloque > h2{
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+section.bloque > h2 .tag{
+  font-family: var(--mono);
+  font-size: .75rem;
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  color: var(--tinta-suave);
+  padding: .15rem .5rem;
+  border-radius: 6px;
+}
+section.bloque > p.intro{
+  color: var(--tinta-suave);
+  margin: .6rem 0 1.4rem;
+  max-width: 75ch;
+}
+
+
+.laboratorio{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+}
+.laboratorio .controles{ flex: 1 1 260px; }
+.laboratorio .escenario{ flex: 2 1 380px; min-width: 0; }
+
+
+fieldset.grupo{
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+fieldset.grupo legend{
+  font-weight: 700;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 0 .4rem;
+  color: var(--tinta-suave);
+}
+.control{ margin-bottom: .8rem; }
+.control:last-child{ margin-bottom: 0; }
+.control label{
+  display: flex;
+  justify-content: space-between;  
+  font-size: .9rem;
+  font-weight: 600;
+  margin-bottom: .25rem;
+}
+.control label output{
+  font-family: var(--mono);
+  font-weight: 400;
+  color: var(--acento);
+}
+.control input[type="range"]{
+  width: 100%;
+  accent-color: var(--acento);
+}
+.control select{
+  width: 100%;
+  padding: .45rem .5rem;
+  font-family: var(--mono);
+  font-size: .9rem;
+  border: 1px solid var(--linea);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--tinta);
+}
+.chip-color{
+  display:inline-block; width:.8em; height:.8em;
+  border-radius:3px; margin-right:.35em; vertical-align:-.05em;
+  border:1px solid rgba(0,0,0,.15);
+}
+
+/* --- Escenario del Box Model --- */
+.vista{
+  background: repeating-linear-gradient(45deg, #eef1f5 0 12px, #f6f7f9 12px 24px);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px;
+  overflow: auto;
+}
+
+#capaMargin{
+  background: var(--c-margin);
+  position: relative;
+  transition: padding .15s;
+}
+#capaBorder{
+  background: var(--c-border);
+  transition: padding .15s;
+}
+#capaPadding{
+  background: var(--c-padding);
+  transition: padding .15s;
+}
+#capaContenido{
+  background: var(--c-content);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: .85rem;
+  transition: width .15s, height .15s;
+  overflow: hidden;
+}
+.etiqueta-capa{
+  position: absolute;
+  font-family: var(--mono);
+  font-size: .65rem;
+  font-weight: 700;
+  color: rgba(0,0,0,.55);
+  padding: 2px 4px;
+}
+#totalCaja{
+  margin-top: .9rem;
+  font-family: var(--mono);
+  font-size: .85rem;
+  background: var(--papel);
+  border: 1px dashed var(--linea);
+  border-radius: 8px;
+  padding: .6rem .8rem;
+  color: var(--tinta-suave);
+}
+#totalCaja strong{ color: var(--tinta); }
+
+/* --- Escenario Flexbox --- */
+#flexContenedor{
+  display: flex;              
+  border: 3px dashed var(--acento);
+  border-radius: var(--radio);
+  background: #eef4ff;
+  min-height: 300px;
+  padding: 10px;
+  transition: gap .15s;
+}
+#flexContenedor .item, #fiContenedor .item{
+  background: var(--acento);
+  color: #fff;
+  font-family: var(--mono);
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 64px;
+  min-height: 64px;
+  padding: .6rem 1rem;
+  box-shadow: 0 2px 6px rgba(37,99,235,.3);
+}
+/* Ítems de distinto tamaño para que se note la alineación */
+#flexContenedor .item:nth-child(2), #fiContenedor .item:nth-child(2){ min-height: 96px; background:#7c3aed; }
+#flexContenedor .item:nth-child(3), #fiContenedor .item:nth-child(3){ min-height: 76px; background:#0d9488; }
+#flexContenedor .item:nth-child(4), #fiContenedor .item:nth-child(4){ background:#db2777; }
+#flexContenedor .item:nth-child(5), #fiContenedor .item:nth-child(5){ min-height: 110px; background:#d97706; }
+#flexContenedor .item:nth-child(n+6){ background:#475569; }
+.botonera{ display:flex; gap:.6rem; margin-top:.8rem; }
+.botonera button{
+  flex: 1;
+  padding: .55rem .8rem;
+  font-weight: 700;
+  font-size: .9rem;
+  border-radius: 8px;
+  border: 1px solid var(--linea);
+  background: #fff;
+  color: var(--tinta);
+  cursor: pointer;
+  transition: background .15s;
+}
+.botonera button:hover{ background: var(--papel); }
+.botonera button.primario{
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #fff;
+}
+.botonera button.primario:hover{ background:#1d4ed8; }
+
+/* --- Panel de código en vivo --- */
+pre.codigo{
+  background: var(--codigo-bg);
+  color: var(--codigo-tx);
+  font-family: var(--mono);
+  font-size: .82rem;
+  line-height: 1.55;
+  border-radius: var(--radio);
+  padding: 1.1rem 1.2rem;
+  margin-top: 1.2rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+pre.codigo .prop{ color: var(--codigo-prop); }
+pre.codigo .val{ color: var(--codigo-val); }
+pre.codigo .com{ color: var(--codigo-com); font-style: italic; }
+
+/* --- Sección 3: Flex ítems (propiedades de los HIJOS) --- */
+#fiContenedor{
+  display: flex;
+  flex-wrap: nowrap;         
+  border: 3px dashed var(--acento);
+  border-radius: var(--radio);
+  background: #eef4ff;
+  min-height: 170px;
+  padding: 10px;
+  gap: 10px;
+  overflow: hidden;
+}
+#fiContenedor .item{
+  cursor: pointer;
+  flex-direction: column;    
+  gap: .15rem;
+  user-select: none;
+}
+#fiContenedor .item .mini{
+  font-size: .58rem;
+  font-weight: 400;
+  opacity: .9;
+  white-space: nowrap;
+}
+#fiContenedor .item.sel{     
+  outline: 3px solid var(--tinta);
+  outline-offset: 2px;
+}
+
+
+#tarjetaHover{
+  background: #fff;
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  padding: 1.3rem 1.6rem;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(28,37,48,.12);
+  cursor: pointer;
+}
+.demo-links{
+  margin-top: .9rem;
+  font-size: .95rem;
+  color: var(--tinta-suave);
+}
+
+/* --- Sección 5: Medidas --- */
+#medPadre{
+  border: 3px dashed var(--acento);
+  border-radius: var(--radio);
+  background: #eef4ff;
+  padding: 10px;
+  width: 480px;              
+  transition: width .1s;
+}
+.barra{
+  color: #fff;
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .5rem .6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.barra.px{  background: #db2777; width: 300px; margin-bottom: .5rem; } /* absoluta: se desborda */
+.barra.pct{ background: #0d9488; width: 70%; }                          /* relativa: se adapta */
+#medFuente{
+  border: 1px dashed var(--linea);
+  border-radius: 8px;
+  background: #fff;
+  padding: .8rem 1rem;
+  margin-top: .9rem;
+}
+
+/* --- Sección 6: Glosario de propiedades --- */
+h3.glo{
+  font-size: 1.05rem;
+  margin: 1.8rem 0 .7rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+h3.glo::after{          
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--linea);
+}
+table.glosario{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+table.glosario th, table.glosario td{
+  text-align: left;
+  padding: .45rem .6rem;
+  border: 1px solid var(--linea);
+  vertical-align: top;
+}
+table.glosario th{       
+  font-family: var(--mono);
+  font-weight: 700;
+  background: var(--papel);
+  white-space: nowrap;
+  width: 1%;
+}
+table.glosario td code{
+  font-family: var(--mono);
+  font-size: .82rem;
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 4px;
+  padding: .05rem .3rem;
+  white-space: nowrap;
+}
+/* Mini demos renderizadas al lado de cada grupo */
+.glo-demo{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: .7rem;
+}
+.glo-demo > div{
+  flex: 1 1 220px;
+  border: 2px dashed var(--linea);
+  border-radius: 8px;
+  padding: .7rem .9rem;
+  background: #fff;
+  min-width: 0;
+}
+.glo-demo > div::before{
+  content: attr(data-titulo);
+  display: block;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  margin-bottom: .4rem;
+}
+.muestra-color{
+  display: inline-block;
+  width: 1em; height: 1em;
+  border-radius: 4px;
+  vertical-align: -.15em;
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+
+aside.tip{
+  margin-top: 1.4rem;
+  background: #fff8e6;
+  border: 1px solid #f0dfae;
+  border-radius: var(--radio);
+  padding: .9rem 1.1rem;
+  font-size: .92rem;
+}
+aside.tip strong{ color: #92600a; }
+
+
+@media (max-width: 640px){
+  section.bloque{ padding: 1.2rem 1rem; }
+  pre.codigo{ font-size: .74rem; }
+}
+</style>
+</head>
+<script data-goatcounter="https://TUCODIGO.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<body>
+
+
+<nav class="barra-sitio" aria-label="Páginas del sitio">
+  <a href="index.html">🏠 Inicio</a>
+  <a href="guia-etiquetas.html">🏷️ Guía HTML</a>
+  <a href="laboratorio-css.html" aria-current="page">🧪 Laboratorio CSS</a>
+</nav>
+
+
+<header class="principal">
+  <h1>Laboratorio CSS: <span class="caja-titulo">Box Model</span> + Flexbox</h1>
+  <p>Movés un control → cambia la caja → cambia el código. Todo lo que ves acá usa las mismas propiedades que vas a escribir vos.</p>
+</header>
+
+
+<nav class="menu" aria-label="Navegación principal">
+  <a href="#box-model">📦 Box Model</a>
+  <a href="#flexbox">🧲 Flex container</a>
+  <a href="#flex-items">🧩 Flex ítems</a>
+  <a href="#pseudoclases">✨ Pseudoclases</a>
+  <a href="#medidas">📏 Medidas</a>
+  <a href="#glosario">📖 Glosario</a>
+</nav>
+
+
+<main>
+
+  <section class="bloque" id="box-model">
+    <h2>1. El Box Model</h2>
+    <p class="intro">
+      Todo elemento HTML es una caja con 4 capas: <strong>contenido</strong>,
+      <strong>padding</strong> (relleno interno), <strong>border</strong> (borde)
+      y <strong>margin</strong> (espacio externo). Los colores son los mismos
+      que usa Chrome DevTools cuando inspeccionás un elemento.
+    </p>
+
+    <div class="laboratorio">
+      <!-- Panel de controles -->
+      <div class="controles">
+        <fieldset class="grupo">
+          <legend>Contenido</legend>
+          <div class="control">
+            <label for="bmWidth"><span><span class="chip-color" style="background:var(--c-content)"></span>width</span> <output id="bmWidthOut">160px</output></label>
+            <input type="range" id="bmWidth" min="60" max="260" value="160">
+          </div>
+          <div class="control">
+            <label for="bmHeight"><span><span class="chip-color" style="background:var(--c-content)"></span>height</span> <output id="bmHeightOut">90px</output></label>
+            <input type="range" id="bmHeight" min="40" max="180" value="90">
+          </div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend>Capas</legend>
+          <div class="control">
+            <label for="bmPadding"><span><span class="chip-color" style="background:var(--c-padding)"></span>padding</span> <output id="bmPaddingOut">20px</output></label>
+            <input type="range" id="bmPadding" min="0" max="60" value="20">
+          </div>
+          <div class="control">
+            <label for="bmBorder"><span><span class="chip-color" style="background:var(--c-border)"></span>border-width</span> <output id="bmBorderOut">6px</output></label>
+            <input type="range" id="bmBorder" min="0" max="30" value="6">
+          </div>
+          <div class="control">
+            <label for="bmMargin"><span><span class="chip-color" style="background:var(--c-margin)"></span>margin</span> <output id="bmMarginOut">25px</output></label>
+            <input type="range" id="bmMargin" min="0" max="60" value="25">
+          </div>
+          <div class="control">
+            <label for="bmRadius"><span>border-radius</span> <output id="bmRadiusOut">0px</output></label>
+            <input type="range" id="bmRadius" min="0" max="60" value="0">
+          </div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend>box-sizing</legend>
+          <div class="control">
+            <select id="bmSizing">
+              <option value="content-box">content-box (por defecto)</option>
+              <option value="border-box">border-box (el que usamos siempre)</option>
+            </select>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- Vista previa -->
+      <div class="escenario">
+        <div class="vista">
+          <div id="capaMargin">
+            <span class="etiqueta-capa">margin</span>
+            <div id="capaBorder">
+              <div id="capaPadding">
+                <div id="capaContenido">contenido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="totalCaja"></p>
+        <pre class="codigo" id="bmCodigo"></pre>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>Tip:</strong> cambiá <code>box-sizing</code> a <code>border-box</code> y mirá el ancho total.
+      Con <code>border-box</code>, el <code>width</code> ya incluye padding y borde: la caja no "crece de sorpresa".
+      Por eso casi todos los sitios arrancan con <code>*{ box-sizing: border-box; }</code>.
+    </aside>
+  </section>
+
+  <!-- ==========================================================
+       SECCIÓN 2 · FLEXBOX
+       ========================================================== -->
+  <section class="bloque" id="flexbox">
+    <h2>2. Flexbox: el contenedor</h2>
+    <p class="intro">
+      Flexbox es un modo de layout: se aplica al <strong>contenedor</strong>
+      (con <code>display: flex</code>) y ordena a sus <strong>hijos directos</strong>.
+      El borde azul punteado es el contenedor; las cajas de colores son los ítems.
+    </p>
+
+    <div class="laboratorio">
+      <!-- Controles del contenedor flex -->
+      <div class="controles">
+        <fieldset class="grupo">
+          <legend>Dirección y eje</legend>
+          <div class="control">
+            <label for="fxDirection">flex-direction</label>
+            <select id="fxDirection">
+              <option value="row">row → fila (por defecto)</option>
+              <option value="row-reverse">row-reverse → fila invertida</option>
+              <option value="column">column → columna</option>
+              <option value="column-reverse">column-reverse → columna invertida</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="fxWrap">flex-wrap</label>
+            <select id="fxWrap">
+              <option value="nowrap">nowrap → no baja de línea</option>
+              <option value="wrap">wrap → baja si no entra</option>
+              <option value="wrap-reverse">wrap-reverse</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend>Alineación</legend>
+          <div class="control">
+            <label for="fxJustify">justify-content <small>(eje principal)</small></label>
+            <select id="fxJustify">
+              <option value="flex-start">flex-start</option>
+              <option value="center">center</option>
+              <option value="flex-end">flex-end</option>
+              <option value="space-between">space-between</option>
+              <option value="space-around">space-around</option>
+              <option value="space-evenly">space-evenly</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="fxAlign">align-items <small>(eje cruzado)</small></label>
+            <select id="fxAlign">
+              <option value="stretch">stretch</option>
+              <option value="flex-start">flex-start</option>
+              <option value="center">center</option>
+              <option value="flex-end">flex-end</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="fxGap"><span>gap</span> <output id="fxGapOut">10px</output></label>
+            <input type="range" id="fxGap" min="0" max="40" value="10">
+          </div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend>Ítems</legend>
+          <div class="botonera">
+            <button type="button" class="primario" id="fxAgregar">+ Agregar</button>
+            <button type="button" id="fxQuitar">− Quitar</button>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- Vista previa flex -->
+      <div class="escenario">
+        <div id="flexContenedor">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+        <pre class="codigo" id="fxCodigo"></pre>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>Tip:</strong> <code>justify-content</code> siempre trabaja sobre el
+      <em>eje principal</em> (el que marca <code>flex-direction</code>) y
+      <code>align-items</code> sobre el eje cruzado. Cambiá a <code>column</code>
+      y fijate cómo "se dan vuelta" los efectos de cada propiedad.
+    </aside>
+  </section>
+
+
+  <section class="bloque" id="flex-items">
+    <h2>3. Flexbox: los hijos (flex ítems)</h2>
+    <p class="intro">
+      Las propiedades de la sección anterior se escriben en el <strong>contenedor</strong>.
+      Pero cada hijo (cada <strong>flex ítem</strong>) tiene las suyas:
+      <code>order</code>, <code>flex-grow</code>, <code>flex-shrink</code> y
+      <code>flex-basis</code>. <strong>Tocá una caja para seleccionarla</strong>
+      y modificala con los controles — cada ítem guarda sus propios valores.
+    </p>
+
+    <div class="laboratorio">
+     
+      <div class="controles">
+        <fieldset class="grupo">
+          <legend>Ítem seleccionado: caja <span id="fiCual">1</span></legend>
+          <div class="control">
+            <label for="fiOrder"><span>order</span> <output id="fiOrderOut">0</output></label>
+            <input type="range" id="fiOrder" min="-1" max="5" value="0">
+          </div>
+          <div class="control">
+            <label for="fiGrow"><span>flex-grow</span> <output id="fiGrowOut">0</output></label>
+            <input type="range" id="fiGrow" min="0" max="5" value="0">
+          </div>
+          <div class="control">
+            <label for="fiShrink"><span>flex-shrink</span> <output id="fiShrinkOut">1</output></label>
+            <input type="range" id="fiShrink" min="0" max="5" value="1">
+          </div>
+          <div class="control">
+            <label for="fiBasis">flex-basis</label>
+            <select id="fiBasis">
+              <option value="auto">auto → según su contenido</option>
+              <option value="0">0 → arranca de cero</option>
+              <option value="120px">120px → tamaño inicial fijo</option>
+              <option value="220px">220px → tamaño inicial grande</option>
+              <option value="40%">40% → relativo al contenedor</option>
+            </select>
+          </div>
+        </fieldset>
+      </div>
+
+
+      <div class="escenario">
+        <div id="fiContenedor">
+          <div class="item"><span>1</span><span class="mini"></span></div>
+          <div class="item"><span>2</span><span class="mini"></span></div>
+          <div class="item"><span>3</span><span class="mini"></span></div>
+          <div class="item"><span>4</span><span class="mini"></span></div>
+        </div>
+        <pre class="codigo" id="fiCodigo"></pre>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>Ítem y contenedor a la vez:</strong> un elemento puede ser flex ítem
+      (hijo de un contenedor flex) y además flex container (tener <code>display: flex</code>
+      para ordenar a <em>sus propios</em> hijos). Es el único caso en el que un elemento
+      lleva propiedades de los dos mundos. De hecho, las cajas de arriba son exactamente
+      eso: cada <code>.item</code> es hijo del contenedor punteado <em>y</em> usa
+      <code>display:flex</code> para centrar su número y su etiquetita.
+    </aside>
+  </section>
+
+
+  <section class="bloque" id="pseudoclases">
+    <h2>4. Pseudoclases: estilos según el estado</h2>
+    <p class="intro">
+      Una pseudoclase se escribe con dos puntos (<code>selector:estado</code>) y aplica
+      estilos solo cuando el elemento está en ese <strong>estado</strong>. La más famosa
+      es <code>:hover</code>. Armá tu propio efecto con <code>transform</code> +
+      <code>box-shadow</code> y probalo pasando el mouse por la tarjeta.
+    </p>
+
+    <div class="laboratorio">
+      <div class="controles">
+        <fieldset class="grupo">
+          <legend>Tu efecto :hover</legend>
+          <div class="control">
+            <label for="psTy"><span>translateY (subir)</span> <output id="psTyOut">-8px</output></label>
+            <input type="range" id="psTy" min="-24" max="0" value="-8">
+          </div>
+          <div class="control">
+            <label for="psScale"><span>scale (agrandar)</span> <output id="psScaleOut">1.03</output></label>
+            <input type="range" id="psScale" min="100" max="115" value="103">
+          </div>
+          <div class="control">
+            <label for="psBlur"><span>sombra (blur)</span> <output id="psBlurOut">18px</output></label>
+            <input type="range" id="psBlur" min="0" max="40" value="18">
+          </div>
+          <div class="control">
+            <label for="psDur"><span>transition (duración)</span> <output id="psDurOut">300ms</output></label>
+            <input type="range" id="psDur" min="0" max="1000" step="50" value="300">
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="escenario">
+        <div class="vista" style="min-height:220px">
+          <div id="tarjetaHover">🐭 Pasá el mouse por acá<br><small style="font-weight:400">…sacalo, y volvé a pasarlo</small></div>
+        </div>
+        <p class="demo-links">Los enlaces tienen sus propios estados — mirá este:
+          <a href="https://developer.mozilla.org" target="_blank" rel="noopener">azul si no lo visitaste, violeta si ya entraste</a>
+        </p>
+        <pre class="codigo" id="psCodigo"></pre>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>Dos secretos:</strong> ① la <code>transition</code> va en el estado
+      <em>normal</em>, no dentro del <code>:hover</code> — así la "vuelta" también es suave
+      (probá poner la duración en 0 y vas a extrañarla). ② El orden de las pseudoclases
+      de enlaces es <code>:link</code>, <code>:visited</code>, <code>:hover</code>,
+      <code>:active</code> — regla mnemotécnica: <strong>L</strong>o<strong>V</strong>e /
+      <strong>H</strong>a<strong>A</strong>te. En otro orden pueden pisarse entre sí.
+    </aside>
+  </section>
+
+
+  <section class="bloque" id="medidas">
+    <h2>5. Medidas: absolutas vs. relativas</h2>
+    <p class="intro">
+      Una medida <strong>absoluta</strong> (px) mide siempre lo mismo, se vea donde se vea.
+      Una <strong>relativa</strong> (%, rem, em, vw, vh) depende de otra cosa — del padre,
+      de la raíz o de la ventana — y por eso <em>se adapta sola</em>.
+      Achicá el contenedor y fijate cuál de las dos barras sobrevive.
+    </p>
+
+    <div class="laboratorio">
+      <div class="controles">
+        <fieldset class="grupo">
+          <legend>Simulá la pantalla</legend>
+          <div class="control">
+            <label for="mdAncho"><span>ancho del contenedor</span> <output id="mdAnchoOut">480px</output></label>
+            <input type="range" id="mdAncho" min="230" max="600" value="480">
+          </div>
+          <p style="font-size:.82rem;color:var(--tinta-suave)">← Llevalo al mínimo: es como pasar de una compu a un celular.</p>
+        </fieldset>
+        <fieldset class="grupo">
+          <legend>Simulá al usuario</legend>
+          <div class="control">
+            <label for="mdFuente"><span>font-size del padre</span> <output id="mdFuenteOut">16px</output></label>
+            <input type="range" id="mdFuente" min="12" max="26" value="16">
+          </div>
+          <p style="font-size:.82rem;color:var(--tinta-suave)">Como alguien que agranda la letra en su navegador o celular por accesibilidad.</p>
+        </fieldset>
+      </div>
+
+      <div class="escenario">
+        
+        <div style="overflow-x:auto;padding-bottom:.4rem">
+          <div id="medPadre">
+            <div class="barra px">width: 300px → absoluta, no se entera de nada</div>
+            <div class="barra pct">width: 70% <span id="pctCalc"></span></div>
+          </div>
+        </div>
+
+        
+        <div id="medFuente">
+          <p style="font-size:16px;margin:0">Este texto mide <strong>16px fijos</strong>: ignora al usuario.</p>
+          <p style="font-size:1em;margin:.4rem 0 0">Este mide <strong>1em</strong>: acompaña el tamaño elegido <span id="emCalc" style="font-family:var(--mono);font-size:.8em;color:var(--tinta-suave)"></span></p>
+        </div>
+
+        <pre class="codigo"><span class="com">/* ABSOLUTA: mide siempre lo mismo */</span>
+.foto { <span class="prop">width</span>: <span class="val">300px</span>; }       <span class="com">/* en un celular... se desborda 💥 */</span>
+
+<span class="com">/* RELATIVAS: dependen de otra cosa, por eso se adaptan */</span>
+.tarjeta { <span class="prop">width</span>: <span class="val">70%</span>; }      <span class="com">/* % → del ancho del PADRE */</span>
+p     { <span class="prop">font-size</span>: <span class="val">1.2rem</span>; }  <span class="com">/* rem → del font-size de &lt;html&gt; (16px por defecto → 19.2px) */</span>
+small { <span class="prop">font-size</span>: <span class="val">0.8em</span>; }   <span class="com">/* em → del font-size del PADRE directo */</span>
+.portada { <span class="prop">height</span>: <span class="val">100vh</span>; }   <span class="com">/* vh/vw → de la VENTANA (viewport) */</span></pre>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>¿Por qué preferimos relativas?</strong> Porque tu página se va a ver en
+      mil pantallas distintas, y porque hay gente que agranda la letra por accesibilidad:
+      <code>rem</code> y <code>em</code> la respetan, <code>px</code> no. Guía rápida:
+      <code>%</code> mira al padre, <code>em</code> mira al font-size del padre,
+      <code>rem</code> mira siempre a la raíz (<code>&lt;html&gt;</code>), y
+      <code>vw</code>/<code>vh</code> miran a la ventana. Los <code>px</code> quedan para
+      detalles que no deben cambiar: bordes finos, sombras.
+    </aside>
+  </section>
+
+
+  <section class="bloque" id="glosario">
+    <h2>6. Glosario: propiedades para tu primer sitio</h2>
+    <p class="intro">
+      Las propiedades que vas a usar sí o sí en un sitio simple, agrupadas por tema.
+      Cada una con qué hace y un ejemplo listo para copiar.
+    </p>
+
+    <!-- ─── El reset ─── -->
+    <h3 class="glo">🧹 Antes de empezar: el reset</h3>
+    <p style="max-width:75ch">
+      Los navegadores traen estilos propios "de fábrica": el <code>&lt;body&gt;</code> tiene
+      margen, los títulos tienen tamaños predefinidos, las listas traen sangría… y cada
+      navegador lo hace un poquito distinto. El <strong>reset</strong> borra todo eso para
+      arrancar de cero y que tu sitio se vea igual en todos lados. Van al
+      <strong>principio</strong> de tu CSS estas tres líneas:
+    </p>
+    <pre class="codigo"><span class="com">/* RESET: va primero en el archivo CSS */</span>
+* {                            <span class="com">/* el asterisco selecciona TODOS los elementos */</span>
+  <span class="prop">margin</span>: <span class="val">0</span>;                 <span class="com">/* borra los márgenes de fábrica */</span>
+  <span class="prop">padding</span>: <span class="val">0</span>;                <span class="com">/* borra los rellenos de fábrica */</span>
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;  <span class="com">/* el width incluye padding y borde (sección 1) */</span>
+}</pre>
+
+    <!-- ─── Espaciado ─── -->
+    <h3 class="glo">📐 Espaciado: lado por lado</h3>
+    <p style="max-width:75ch">
+      <code>margin</code> y <code>padding</code> se pueden aplicar a un solo lado
+      agregando <code>-top</code>, <code>-right</code>, <code>-bottom</code> o <code>-left</code>:
+    </p>
+    <table class="glosario">
+      <tr><th>margin-top</th><td>Margen solo arriba</td><td><code>margin-top: 20px;</code></td></tr>
+      <tr><th>margin-bottom</th><td>Margen solo abajo (el más usado: separa un elemento del siguiente)</td><td><code>margin-bottom: 1rem;</code></td></tr>
+      <tr><th>padding-left</th><td>Relleno solo a la izquierda (y así con right, top, bottom)</td><td><code>padding-left: 12px;</code></td></tr>
+      <tr><th>margin: 0 auto</th><td>Truco clásico: centra horizontalmente un bloque que tiene <code>width</code></td><td><code>margin: 0 auto;</code></td></tr>
+    </table>
+    <p style="max-width:75ch;margin-top:.8rem">
+      Y el <strong>atajo</strong> con varios valores sigue <strong>el sentido del reloj 🕐</strong>,
+      empezando desde arriba:
+    </p>
+    <pre class="codigo"><span class="com">/* 4 valores: arriba → derecha → abajo → izquierda (como el reloj) */</span>
+<span class="prop">margin</span>: <span class="val">10px 20px 30px 40px</span>;
+
+<span class="com">/* 2 valores: vertical (arriba y abajo) | horizontal (izquierda y derecha) */</span>
+<span class="prop">padding</span>: <span class="val">10px 25px</span>;
+
+<span class="com">/* 1 valor: los cuatro lados iguales */</span>
+<span class="prop">margin</span>: <span class="val">16px</span>;</pre>
+    <div class="glo-demo">
+      <div data-titulo="margin: 0 auto en acción">
+        <div style="width:60%;margin:0 auto;background:var(--c-content);border-radius:6px;text-align:center;padding:.4rem;font-size:.8rem;font-weight:700">centrada</div>
+        <p style="font-size:.78rem;color:var(--tinta-suave);margin-top:.4rem">Bloque con <code style="font-family:var(--mono)">width: 60%</code> + <code style="font-family:var(--mono)">margin: 0 auto</code>: el margen sobrante se reparte igual a los costados.</p>
+      </div>
+    </div>
+
+    <!-- ─── Texto y fuentes ─── -->
+    <h3 class="glo">🔤 Texto y fuentes</h3>
+    <table class="glosario">
+      <tr><th>color</th><td>Color del texto</td><td><code>color: #1c2530;</code></td></tr>
+      <tr><th>font-family</th><td>La fuente. Siempre con "suplentes" por si la primera no está, y una genérica al final (<code>sans-serif</code>, <code>serif</code> o <code>monospace</code>)</td><td><code>font-family: Arial, sans-serif;</code></td></tr>
+      <tr><th>font-size</th><td>Tamaño de letra (mejor en <code>rem</code>, sección 5)</td><td><code>font-size: 1.2rem;</code></td></tr>
+      <tr><th>font-weight</th><td>Grosor: <code>normal</code>, <code>bold</code>, o números de <code>100</code> a <code>900</code> (<code>400</code> = normal, <code>700</code> = negrita)</td><td><code>font-weight: bold;</code></td></tr>
+      <tr><th>font-style</th><td>Cursiva sí o no</td><td><code>font-style: italic;</code></td></tr>
+      <tr><th>text-align</th><td>Alineación: <code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code></td><td><code>text-align: center;</code></td></tr>
+      <tr><th>text-decoration</th><td>Subrayado, tachado… o <strong>nada</strong>: <code>none</code> es lo que le saca el subrayado a los enlaces</td><td><code>text-decoration: none;</code></td></tr>
+      <tr><th>text-transform</th><td>Mayúsculas/minúsculas sin cambiar el HTML</td><td><code>text-transform: uppercase;</code></td></tr>
+      <tr><th>line-height</th><td>El <strong>interlineado</strong>. Sin unidad = se multiplica por el font-size. Entre <code>1.4</code> y <code>1.7</code> se lee cómodo</td><td><code>line-height: 1.6;</code></td></tr>
+    </table>
+    <div class="glo-demo">
+      <div data-titulo="line-height: 1 vs 1.6">
+        <p style="line-height:1;font-size:.82rem;margin:0">Con line-height 1 los renglones quedan apretados y cuesta seguir la lectura cuando el texto es largo.</p>
+        <p style="line-height:1.6;font-size:.82rem;margin:.6rem 0 0">Con line-height 1.6 el mismo texto respira y los ojos encuentran el renglón siguiente sin esfuerzo.</p>
+      </div>
+      <div data-titulo="text-decoration en enlaces">
+        <p style="font-size:.9rem;margin:0"><a href="#glosario">Enlace normal (subrayado)</a></p>
+        <p style="font-size:.9rem;margin:.4rem 0 0"><a href="#glosario" style="text-decoration:none">Con text-decoration: none</a></p>
+      </div>
+      <div data-titulo="text-transform: uppercase">
+        <p style="font-size:.9rem;margin:0">En el HTML dice: <em>menú principal</em></p>
+        <p style="font-size:.9rem;margin:.4rem 0 0;text-transform:uppercase;font-weight:700;letter-spacing:.05em">menú principal</p>
+      </div>
+    </div>
+
+    <!-- ─── Colores ─── -->
+    <h3 class="glo">🎨 Cómo se escriben los colores</h3>
+    <table class="glosario">
+      <tr><th>por nombre</th><td><span class="muestra-color" style="background:tomato"></span> Hay ~140 nombres en inglés. Fáciles para probar, limitados para diseñar</td><td><code>color: tomato;</code></td></tr>
+      <tr><th>hexadecimal</th><td><span class="muestra-color" style="background:#2563eb"></span> El formato más usado: <code>#</code> + 6 caracteres (rojo-verde-azul). Es el que copiás de cualquier selector de color</td><td><code>color: #2563eb;</code></td></tr>
+      <tr><th>rgb()</th><td><span class="muestra-color" style="background:rgb(37,99,235)"></span> Lo mismo pero con números de 0 a 255</td><td><code>rgb(37, 99, 235)</code></td></tr>
+      <tr><th>rgba()</th><td><span class="muestra-color" style="background:rgba(37,99,235,.4)"></span> Igual que rgb + un cuarto valor de <strong>transparencia</strong> (0 = invisible, 1 = sólido). Ideal para sombras y fondos suaves</td><td><code>rgba(37, 99, 235, 0.4)</code></td></tr>
+    </table>
+
+    <!-- ─── Fondos y bordes ─── -->
+    <h3 class="glo">🖼️ Fondos, bordes y sombras</h3>
+    <table class="glosario">
+      <tr><th>background-color</th><td>Color de fondo del elemento</td><td><code>background-color: #f6f7f9;</code></td></tr>
+      <tr><th>border</th><td>Atajo de tres partes: grosor + estilo (<code>solid</code>, <code>dashed</code>, <code>dotted</code>) + color</td><td><code>border: 2px solid #1c2530;</code></td></tr>
+      <tr><th>border-radius</th><td>Redondea las esquinas (ya lo probaste en la sección 1). Con <code>50%</code> un cuadrado se vuelve círculo</td><td><code>border-radius: 10px;</code></td></tr>
+      <tr><th>box-shadow</th><td>Sombra: desplazamiento-x, desplazamiento-y, difuminado, color (con rgba para que sea suave)</td><td><code>box-shadow: 0 4px 12px rgba(0,0,0,.15);</code></td></tr>
+    </table>
+
+    <!-- ─── Listas ─── -->
+    <h3 class="glo">🔘 Listas (y el truco del menú)</h3>
+    <p style="max-width:75ch">
+      <code>list-style: none</code> le saca las viñetas a una lista. Es el primer paso del
+      patrón más repetido de la web: <strong>todo menú de navegación es un
+      <code>&lt;ul&gt;</code> sin viñetas puesto en fila con flexbox</strong>.
+    </p>
+    <pre class="codigo"><span class="com">/* De lista con viñetas → a menú horizontal */</span>
+nav ul {
+  <span class="prop">list-style</span>: <span class="val">none</span>;   <span class="com">/* 1. chau viñetas */</span>
+  <span class="prop">display</span>: <span class="val">flex</span>;      <span class="com">/* 2. los &lt;li&gt; se ponen en fila (¡sección 2!) */</span>
+  <span class="prop">gap</span>: <span class="val">1.5rem</span>;        <span class="com">/* 3. separación entre opciones */</span>
+}
+nav a {
+  <span class="prop">text-decoration</span>: <span class="val">none</span>;  <span class="com">/* 4. chau subrayado */</span>
+}</pre>
+    <div class="glo-demo">
+      <div data-titulo="lista normal">
+        <ul style="margin-left:1.2rem;font-size:.9rem">
+          <li>Inicio</li><li>Clases</li><li>Contacto</li>
+        </ul>
+      </div>
+      <div data-titulo="la misma lista, hecha menú">
+        <ul style="list-style:none;display:flex;gap:1.2rem;font-size:.9rem;font-weight:700">
+          <li><a href="#glosario" style="text-decoration:none">Inicio</a></li>
+          <li><a href="#glosario" style="text-decoration:none">Clases</a></li>
+          <li><a href="#glosario" style="text-decoration:none">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="tip">
+      💡 <strong>Cómo estudiar este glosario:</strong> no hace falta memorizarlo — hay que
+      saber que existe. Cuando estés armando tu sitio y pienses "quiero sacar el subrayado"
+      o "quiero más aire entre renglones", volvé acá y copiá el ejemplo. Así se aprende CSS
+      de verdad: usándolo.😉
+    </aside>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     <footer>
+     ============================================================ -->
+<footer class="pie">
+  <p>Hecho con <code>&lt;etiquetas semánticas&gt;</code>, box model y flexbox · Desarrollado con ❤️ Profe Vanesa</p>
+</footer>
+
+<script>
+
+
+const $ = id => document.getElementById(id);
+
+/* ---------- 1) BOX MODEL ---------- */
+const bmControles = ["bmWidth","bmHeight","bmPadding","bmBorder","bmMargin","bmRadius"];
+
+function pintarBoxModel(){
+  const w  = +$("bmWidth").value;
+  const h  = +$("bmHeight").value;
+  const p  = +$("bmPadding").value;
+  const b  = +$("bmBorder").value;
+  const m  = +$("bmMargin").value;
+  const r  = +$("bmRadius").value;
+  const sizing = $("bmSizing").value;
+
+
+  $("bmWidthOut").textContent   = w + "px";
+  $("bmHeightOut").textContent  = h + "px";
+  $("bmPaddingOut").textContent = p + "px";
+  $("bmBorderOut").textContent  = b + "px";
+  $("bmMarginOut").textContent  = m + "px";
+  $("bmRadiusOut").textContent  = r + "px";
+
+
+  let contW = w, contH = h;
+  if (sizing === "border-box"){
+    contW = Math.max(20, w - 2*p - 2*b);
+    contH = Math.max(20, h - 2*p - 2*b);
+  }
+
+  $("capaMargin").style.padding  = m + "px";
+  $("capaBorder").style.padding  = b + "px";
+  $("capaBorder").style.borderRadius = r + "px";
+  $("capaPadding").style.padding = p + "px";
+  $("capaContenido").style.width  = contW + "px";
+  $("capaContenido").style.height = contH + "px";
+
+
+  const totalW = (sizing === "border-box" ? w : w + 2*p + 2*b);
+  const detalle = sizing === "border-box"
+    ? `width ya incluye padding y border`
+    : `${w} (width) + ${2*p} (padding) + ${2*b} (border)`;
+  $("totalCaja").innerHTML =
+    `Ancho visible de la caja: <strong>${totalW}px</strong> → ${detalle}. El margin (${m}px por lado) empuja a los vecinos pero no forma parte de la caja.`;
+
+
+  $("bmCodigo").innerHTML =
+`<span class="com">/* La caja azul de la vista previa */</span>
+.caja {
+  <span class="prop">box-sizing</span>: <span class="val">${sizing}</span>;   <span class="com">/* cómo se calcula el tamaño total */</span>
+  <span class="prop">width</span>: <span class="val">${w}px</span>;           <span class="com">/* ancho ${sizing === "border-box" ? "TOTAL (incluye padding y border)" : "solo del contenido"} */</span>
+  <span class="prop">height</span>: <span class="val">${h}px</span>;
+  <span class="prop">padding</span>: <span class="val">${p}px</span>;         <span class="com">/* relleno interno (verde) */</span>
+  <span class="prop">border</span>: <span class="val">${b}px solid</span>;    <span class="com">/* borde (amarillo) */</span>
+  <span class="prop">margin</span>: <span class="val">${m}px</span>;          <span class="com">/* espacio externo (naranja) */</span>
+  <span class="prop">border-radius</span>: <span class="val">${r}px</span>;   <span class="com">/* esquinas redondeadas */</span>
+}`;
+}
+
+bmControles.forEach(id => $(id).addEventListener("input", pintarBoxModel));
+$("bmSizing").addEventListener("change", pintarBoxModel);
+
+/* ---------- 2) FLEXBOX ---------- */
+function pintarFlex(){
+  const dir     = $("fxDirection").value;
+  const wrap    = $("fxWrap").value;
+  const justify = $("fxJustify").value;
+  const align   = $("fxAlign").value;
+  const gap     = +$("fxGap").value;
+
+  $("fxGapOut").textContent = gap + "px";
+
+  const cont = $("flexContenedor");
+  cont.style.flexDirection = dir;
+  cont.style.flexWrap      = wrap;
+  cont.style.justifyContent= justify;
+  cont.style.alignItems    = align;
+  cont.style.gap           = gap + "px";
+
+  const ejePrincipal = dir.startsWith("row") ? "horizontal ↔" : "vertical ↕";
+  const ejeCruzado   = dir.startsWith("row") ? "vertical ↕" : "horizontal ↔";
+
+  $("fxCodigo").innerHTML =
+`<span class="com">/* El contenedor de borde azul punteado */</span>
+.contenedor {
+  <span class="prop">display</span>: <span class="val">flex</span>;                <span class="com">/* activa flexbox en los hijos directos */</span>
+  <span class="prop">flex-direction</span>: <span class="val">${dir}</span>;   <span class="com">/* eje principal: ${ejePrincipal} */</span>
+  <span class="prop">flex-wrap</span>: <span class="val">${wrap}</span>;        <span class="com">/* ¿los ítems bajan de línea? */</span>
+  <span class="prop">justify-content</span>: <span class="val">${justify}</span>; <span class="com">/* distribución en el eje principal (${ejePrincipal}) */</span>
+  <span class="prop">align-items</span>: <span class="val">${align}</span>;     <span class="com">/* alineación en el eje cruzado (${ejeCruzado}) */</span>
+  <span class="prop">gap</span>: <span class="val">${gap}px</span>;             <span class="com">/* separación entre ítems */</span>
+}`;
+}
+
+["fxDirection","fxWrap","fxJustify","fxAlign"].forEach(id =>
+  $(id).addEventListener("change", pintarFlex));
+$("fxGap").addEventListener("input", pintarFlex);
+
+
+$("fxAgregar").addEventListener("click", () => {
+  const cont = $("flexContenedor");
+  if (cont.children.length >= 10) return;      // límite razonable
+  const nuevo = document.createElement("div");
+  nuevo.className = "item";
+  nuevo.textContent = cont.children.length + 1;
+  cont.appendChild(nuevo);
+});
+$("fxQuitar").addEventListener("click", () => {
+  const cont = $("flexContenedor");
+  if (cont.children.length > 1) cont.lastElementChild.remove();
+});
+
+/* ---------- 3) FLEX ÍTEMS (propiedades de los HIJOS) ---------- */
+const fiCont  = $("fiContenedor");
+const fiItems = [...fiCont.children];
+
+
+const fiEstado = fiItems.map((el, i) =>
+  ({ order: 0, grow: i === 1 ? 1 : 0, shrink: 1, basis: "auto" }));
+let fiSel = 0;   // índice del ítem seleccionado
+
+function pintarFlexItems(){
+  fiItems.forEach((el, i) => {
+    const e = fiEstado[i];
+    
+    el.style.order      = e.order;
+    el.style.flexGrow   = e.grow;
+    el.style.flexShrink = e.shrink;
+    el.style.flexBasis  = e.basis;
+    el.classList.toggle("sel", i === fiSel);  
+  
+    el.querySelector(".mini").textContent = `o:${e.order} g:${e.grow} s:${e.shrink}`;
+  });
+
+  
+  const e = fiEstado[fiSel];
+  $("fiCual").textContent = fiSel + 1;
+  $("fiOrder").value  = e.order;   $("fiOrderOut").textContent  = e.order;
+  $("fiGrow").value   = e.grow;    $("fiGrowOut").textContent   = e.grow;
+  $("fiShrink").value = e.shrink;  $("fiShrinkOut").textContent = e.shrink;
+  $("fiBasis").value  = e.basis;
+
+  $("fiCodigo").innerHTML =
+`<span class="com">/* Propiedades del ÍTEM ${fiSel + 1} — van en el hijo, no en el contenedor */</span>
+.caja-${fiSel + 1} {
+  <span class="prop">order</span>: <span class="val">${e.order}</span>;         <span class="com">/* posición visual: menor número va primero (default 0) */</span>
+  <span class="prop">flex-grow</span>: <span class="val">${e.grow}</span>;     <span class="com">/* cuántas "partes" del espacio SOBRANTE se lleva (0 = no crece) */</span>
+  <span class="prop">flex-shrink</span>: <span class="val">${e.shrink}</span>;   <span class="com">/* cuánto cede cuando FALTA espacio (0 = se niega a achicarse) */</span>
+  <span class="prop">flex-basis</span>: <span class="val">${e.basis}</span>;  <span class="com">/* tamaño inicial en el eje principal, antes de crecer/ceder */</span>
+}
+
+<span class="com">/* Atajo muy usado: flex: grow shrink basis  →  flex: 1 1 0;  o directamente  flex: 1; */</span>`;
+}
+
+fiItems.forEach((el, i) => el.addEventListener("click", () => { fiSel = i; pintarFlexItems(); }));
+
+
+$("fiOrder").addEventListener("input",  () => { fiEstado[fiSel].order  = +$("fiOrder").value;  pintarFlexItems(); });
+$("fiGrow").addEventListener("input",   () => { fiEstado[fiSel].grow   = +$("fiGrow").value;   pintarFlexItems(); });
+$("fiShrink").addEventListener("input", () => { fiEstado[fiSel].shrink = +$("fiShrink").value; pintarFlexItems(); });
+$("fiBasis").addEventListener("change", () => { fiEstado[fiSel].basis  =  $("fiBasis").value;  pintarFlexItems(); });
+
+/* ---------- 4) PSEUDOCLASES (:hover con transform + sombra) ---------- */
+
+const hojaHover = document.createElement("style");
+document.head.appendChild(hojaHover);
+
+function pintarHover(){
+  const ty   = +$("psTy").value;                       // cuánto sube
+  const sc   = (+$("psScale").value / 100).toFixed(2); // 103 → 1.03
+  const blur = +$("psBlur").value;                     // difuminado de la sombra
+  const dur  = +$("psDur").value;                      // duración de la transición
+
+  $("psTyOut").textContent    = ty + "px";
+  $("psScaleOut").textContent = sc;
+  $("psBlurOut").textContent  = blur + "px";
+  $("psDurOut").textContent   = dur + "ms";
+
+  hojaHover.textContent = `
+    #tarjetaHover{ transition: transform ${dur}ms, box-shadow ${dur}ms; }
+    #tarjetaHover:hover{
+      transform: translateY(${ty}px) scale(${sc});
+      box-shadow: 0 ${Math.round(blur / 2)}px ${blur}px rgba(28,37,48,.28);
+    }`;
+
+  $("psCodigo").innerHTML =
+`<span class="com">/* Estado NORMAL: acá va la transition, así la "vuelta" también es suave */</span>
+.tarjeta {
+  <span class="prop">transition</span>: <span class="val">transform ${dur}ms, box-shadow ${dur}ms</span>;
+}
+
+<span class="com">/* Estado :hover → aplica solo mientras el mouse está encima */</span>
+.tarjeta<span class="prop">:hover</span> {
+  <span class="prop">transform</span>: <span class="val">translateY(${ty}px) scale(${sc})</span>;   <span class="com">/* sube y se agranda */</span>
+  <span class="prop">box-shadow</span>: <span class="val">0 ${Math.round(blur / 2)}px ${blur}px rgba(0,0,0,.28)</span>;  <span class="com">/* sombra = sensación de altura */</span>
+}
+
+<span class="com">/* Los enlaces tienen sus propios estados (orden LoVe/HAte) */</span>
+a<span class="prop">:link</span>    { <span class="prop">color</span>: <span class="val">#2563eb</span>; }   <span class="com">/* todavía sin visitar */</span>
+a<span class="prop">:visited</span> { <span class="prop">color</span>: <span class="val">#7c3aed</span>; }   <span class="com">/* ya lo visitaste */</span>
+a<span class="prop">:hover</span>   { <span class="prop">text-decoration</span>: <span class="val">none</span>; }
+a<span class="prop">:active</span>  { <span class="prop">color</span>: <span class="val">#db2777</span>; }   <span class="com">/* mientras mantenés el click */</span>`;
+}
+
+["psTy","psScale","psBlur","psDur"].forEach(id => $(id).addEventListener("input", pintarHover));
+
+/* ---------- 5) MEDIDAS ---------- */
+function pintarMedidas(){
+  const w  = +$("mdAncho").value;    // ancho del "padre" (simula la pantalla)
+  const fs = +$("mdFuente").value;   // font-size del padre del texto
+
+  $("mdAnchoOut").textContent = w + "px";
+  $("medPadre").style.width = w + "px";
+  
+  $("pctCalc").textContent = `→ 70% de ${w}px = ${Math.round(w * 0.7)}px`;
+
+  $("mdFuenteOut").textContent = fs + "px";
+  $("medFuente").style.fontSize = fs + "px";   
+  $("emCalc").textContent = `(acá 1em = ${fs}px)`;  
+}
+$("mdAncho").addEventListener("input", pintarMedidas);
+$("mdFuente").addEventListener("input", pintarMedidas);
+
+pintarBoxModel();
+pintarFlex();
+pintarFlexItems();
+pintarHover();
+pintarMedidas();
+</script>
+</body>
+</html>

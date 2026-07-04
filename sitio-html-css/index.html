@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML y CSS · Material de clase</title>
+  <link rel="stylesheet" href="estilos-base.css">
+  <style>
+   
+    header.principal{
+      padding: 3.5rem 1.5rem 3rem;
+    }
+    header.principal h1{
+      font-size: clamp(1.7rem, 5vw, 2.6rem);
+      letter-spacing: -0.02em;
+    }
+    header.principal h1 .caja-titulo{
+      display: inline-block;
+      border: 3px dashed var(--c-border);
+      background: rgba(255,255,255,.06);
+      padding: .15em .5em;
+      border-radius: 8px;
+    }
+
+    /* El footer siempre abajo: body en columna, main se estira */
+    body{
+      min-height: 100vh;        
+      display: flex;
+      flex-direction: column;
+    }
+    main{
+      flex: 1;                 
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;           
+      padding: 2.5rem 1.25rem 3rem;
+    }
+
+  
+    .tarjetas{
+      display: flex;         
+      gap: 1.5rem;
+      flex-wrap: wrap;          
+      justify-content: center;
+    }
+
+    .tarjeta{
+      flex: 1 1 320px;          
+      background: var(--tarjeta);
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+      padding: 1.8rem 1.6rem;   
+      text-decoration: none;    
+      color: var(--tinta);
+      display: flex;            
+      flex-direction: column;
+      gap: .6rem;
+      
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+
+    
+    .tarjeta:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 14px 28px rgba(28, 37, 48, .18);
+      border-color: var(--acento);
+    }
+
+    .tarjeta .emoji{ font-size: 2.2rem; }
+    .tarjeta h2{ font-size: 1.3rem; }
+    .tarjeta p{
+      color: var(--tinta-suave);
+      font-size: .95rem;
+      flex: 1;                  
+      max-width: none;          
+      margin: 0;
+    }
+
+    .tarjeta ul{
+      list-style: none;        
+      font-size: .85rem;
+      color: var(--tinta-suave);
+      font-family: var(--mono);
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+    .tarjeta ul li{
+      background: var(--papel);
+      border: 1px solid var(--linea);
+      border-radius: 999px;
+      padding: .15rem .6rem;
+    }
+
+    .tarjeta .entrar{
+      align-self: flex-start;   
+      background: var(--acento);
+      color: #fff;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .55rem 1.1rem;
+      border-radius: 8px;
+      margin-top: .5rem;
+    }
+    .tarjeta:hover .entrar{ background: #1d4ed8; }
+  </style>
+</head>
+<script data-goatcounter="https://TUCODIGO.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<body>
+
+
+<nav class="barra-sitio" aria-label="Páginas del sitio">
+  <a href="index.html" aria-current="page">🏠 Inicio</a>
+  <a href="guia-etiquetas.html">🏷️ Guía HTML</a>
+  <a href="laboratorio-css.html">🧪 Laboratorio CSS</a>
+</nav>
+
+  <header class="principal">
+    <h1>Aprendé <span class="caja-titulo">HTML</span> + <span class="caja-titulo">CSS</span></h1>
+    <p>Material interactivo de clase: una guía de referencia para consultar
+       y un laboratorio con sliders para experimentar. Elegí por dónde empezar 👇</p>
+  </header>
+
+  <main>
+    <div class="tarjetas">
+
+     
+      <a class="tarjeta" href="guia-etiquetas.html">
+        <span class="emoji">🏷️</span>
+        <h2>Guía de etiquetas HTML</h2>
+        <p>Las etiquetas más usadas con su definición, cuándo usarlas, sus
+           atributos y ejemplos con el resultado al lado. Con buscador.</p>
+        <ul>
+          <li>estructura</li><li>semánticas</li><li>texto</li>
+          <li>listas</li><li>img · iframe</li><li>formularios</li>
+        </ul>
+        <span class="entrar">Abrir la guía →</span>
+      </a>
+
+      <a class="tarjeta" href="laboratorio-css.html">
+        <span class="emoji">🧪</span>
+        <h2>Laboratorio CSS</h2>
+        <p>Movés un slider → cambia la caja → cambia el código.
+           Para entender CSS jugando con valores reales.</p>
+        <ul>
+          <li>box model</li><li>flexbox</li><li>flex ítems</li>
+          <li>pseudoclases</li><li>medidas</li><li>glosario</li>
+        </ul>
+        <span class="entrar">Abrir el laboratorio →</span>
+      </a>
+
+    </div>
+  </main>
+
+  <footer class="pie">
+    <p>Hecho con <code>box model</code> + <code>flexbox</code> + <code>:hover</code> (sí, esta portada también) · Desarrollado con ❤️ Profe Vanesa</p>
+  </footer>
+
+</body>
+</html>

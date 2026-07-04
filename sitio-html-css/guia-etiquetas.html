@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de etiquetas HTML · Referencia básica</title>
+<link rel="stylesheet" href="estilos-base.css">
+<style>
+
+:root{
+  
+  --codigo-tag: #8ec9ff;   /* nombres de etiqueta en el código */
+  --codigo-attr:#c3e88d;   /* atributos */
+  
+  --cat-estructura: #7c3aed;
+  --cat-texto:      #2563eb;
+  --cat-listas:     #0d9488;
+  --cat-medios:     #db2777;
+  --cat-tablas:     #d97706;
+  --cat-forms:      #475569;
+  --cat-semantica:  #16a34a;
+}
+
+
+/* ---------- <header> : presentación de la guía ---------- */
+header.principal h1{
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  letter-spacing: -0.02em;
+  font-family: var(--mono);
+}
+header.principal h1 .ang{ color: #ffd28e; }
+
+/* ---------- <nav> : buscador + filtros por categoría ---------- */
+nav.filtros{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid var(--linea);
+  padding: .8rem 1rem;
+  display: flex;              /* flexbox otra vez 😉 */
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+nav.filtros input[type="search"]{
+  flex: 1 1 220px;
+  max-width: 320px;
+  padding: .5rem .9rem;
+  font-size: .95rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  font-family: var(--mono);
+}
+nav.filtros input[type="search"]:focus{
+  outline: 2px solid var(--acento);
+  border-color: transparent;
+}
+nav.filtros button.chip{
+  border: 1px solid var(--linea);
+  background: #fff;
+  color: var(--tinta-suave);
+  font-weight: 700;
+  font-size: .82rem;
+  padding: .35rem .8rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .15s;
+}
+nav.filtros button.chip:hover{ border-color: var(--chip, var(--acento)); color: var(--chip, var(--acento)); }
+nav.filtros button.chip.activo{
+  background: var(--chip, var(--acento));
+  border-color: var(--chip, var(--acento));
+  color: #fff;
+}
+
+/* ---------- <main> : el listado de etiquetas ---------- */
+main{
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+p.contador{
+  color: var(--tinta-suave);
+  font-size: .9rem;
+  margin-bottom: 1rem;
+  font-family: var(--mono);
+}
+
+
+article.ficha{
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
+  border-left: 5px solid var(--cat, var(--acento)); /* color según categoría */
+  border-radius: var(--radio);
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1.4rem;
+  scroll-margin-top: 5rem;
+}
+article.ficha.oculta{ display: none; }  /* el buscador oculta con esta clase */
+
+article.ficha header.ficha-top{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .7rem;
+  margin-bottom: .5rem;
+}
+article.ficha h2{
+  font-family: var(--mono);
+  font-size: 1.35rem;
+  color: var(--tinta);
+}
+article.ficha h2 .ang{ color: var(--cat, var(--acento)); }
+article.ficha .categoria{
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--cat, var(--acento));
+  background: color-mix(in srgb, var(--cat, var(--acento)) 10%, white);
+  border-radius: 999px;
+  padding: .15rem .6rem;
+}
+article.ficha .cierre{
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--tinta-suave);
+  margin-left: auto;
+}
+
+article.ficha p.definicion{ margin-bottom: .3rem; }
+article.ficha p.uso{
+  color: var(--tinta-suave);
+  font-size: .93rem;
+  margin-bottom: 1rem;
+}
+article.ficha p.uso strong{ color: var(--tinta); }
+
+/* Tabla de atributos dentro de cada ficha */
+table.atributos{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+  margin-bottom: 1rem;
+}
+table.atributos caption{
+  text-align: left;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--tinta-suave);
+  padding-bottom: .35rem;
+}
+table.atributos th, table.atributos td{
+  text-align: left;
+  padding: .4rem .6rem;
+  border: 1px solid var(--linea);
+}
+table.atributos th{
+  background: var(--papel);
+  font-family: var(--mono);
+  font-weight: 700;
+  white-space: nowrap;
+  width: 1%;
+}
+
+.ejemplo{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+}
+.ejemplo pre{
+  flex: 1 1 300px;
+  background: var(--codigo-bg);
+  color: var(--codigo-tx);
+  font-family: var(--mono);
+  font-size: .8rem;
+  line-height: 1.55;
+  border-radius: 8px;
+  padding: .9rem 1rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.ejemplo pre .t{ color: var(--codigo-tag); }
+.ejemplo pre .a{ color: var(--codigo-attr); }
+.ejemplo pre .v{ color: var(--codigo-val); }
+.ejemplo pre .c{ color: var(--codigo-com); font-style: italic; }
+.ejemplo .resultado{
+  flex: 1 1 260px;
+  border: 2px dashed var(--linea);
+  border-radius: 8px;
+  padding: .9rem 1rem;
+  background: #fff;
+  min-width: 0;
+}
+.ejemplo .resultado::before{
+  content: "RESULTADO EN EL NAVEGADOR";
+  display: block;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--tinta-suave);
+  margin-bottom: .5rem;
+}
+
+.resultado table{ border-collapse: collapse; }
+.resultado th, .resultado td{ border: 1px solid #999; padding: .3rem .6rem; }
+.resultado img{ max-width: 100%; border-radius: 6px; }
+.resultado input, .resultado select, .resultado textarea, .resultado button{
+  font: inherit; padding: .3rem .5rem; margin: .15rem 0;
+  border: 1px solid var(--linea); border-radius: 6px;
+}
+.resultado button{ background: var(--acento); color:#fff; border: none; cursor: pointer; padding: .4rem .9rem; }
+.resultado label{ display:block; font-size:.9rem; font-weight:600; margin-top:.4rem; }
+
+
+aside.nota{
+  margin-top: .9rem;
+  background: #fff8e6;
+  border: 1px solid #f0dfae;
+  border-radius: 8px;
+  padding: .6rem .9rem;
+  font-size: .88rem;
+}
+
+
+h2.separador{
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--tinta-suave);
+  margin: 2.2rem 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+h2.separador::after{
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--linea);
+}
+h2.separador.oculta{ display:none; }
+
+
+#sinResultados{
+  display: none;
+  text-align: center;
+  color: var(--tinta-suave);
+  padding: 3rem 1rem;
+  border: 2px dashed var(--linea);
+  border-radius: var(--radio);
+}
+
+/* ---------- <footer> ---------- */
+
+@media (max-width: 640px){
+  article.ficha{ padding: 1.1rem 1rem; }
+  .ejemplo pre{ font-size: .72rem; }
+}
+</style>
+</head>
+<script data-goatcounter="https://TUCODIGO.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<body>
+
+
+<nav class="barra-sitio" aria-label="Páginas del sitio">
+  <a href="index.html">🏠 Inicio</a>
+  <a href="guia-etiquetas.html" aria-current="page">🏷️ Guía HTML</a>
+  <a href="laboratorio-css.html">🧪 Laboratorio CSS</a>
+</nav>
+
+
+<header class="principal">
+  <h1><span class="ang">&lt;</span>Guía de etiquetas HTML<span class="ang"> /&gt;</span></h1>
+  <p>Las etiquetas más comunes con su definición, cuándo usarlas, sus atributos principales y un ejemplo con el resultado real al lado.</p>
+</header>
+
+<nav class="filtros" aria-label="Buscar y filtrar etiquetas">
+  <input type="search" id="buscador" placeholder="🔍 Buscar etiqueta… ej: img" aria-label="Buscar etiqueta">
+  <button class="chip activo" data-cat="todas">Todas</button>
+  <button class="chip" data-cat="estructura" style="--chip:var(--cat-estructura)">Estructura</button>
+  <button class="chip" data-cat="semantica" style="--chip:var(--cat-semantica)">Semánticas</button>
+  <button class="chip" data-cat="texto" style="--chip:var(--cat-texto)">Texto</button>
+  <button class="chip" data-cat="listas" style="--chip:var(--cat-listas)">Listas</button>
+  <button class="chip" data-cat="medios" style="--chip:var(--cat-medios)">Enlaces y medios</button>
+  <button class="chip" data-cat="tablas" style="--chip:var(--cat-tablas)">Tablas</button>
+  <button class="chip" data-cat="forms" style="--chip:var(--cat-forms)">Formularios</button>
+</nav>
+
+<main>
+  <p class="contador" id="contador"></p>
+
+  <!-- ════════════════ ESTRUCTURA ════════════════ -->
+  <h2 class="separador" data-cat="estructura">Estructura del documento</h2>
+
+  
+  <article class="ficha" data-cat="estructura" data-tag="html head body title meta doctype" style="--cat:var(--cat-estructura)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>html<span class="ang">&gt;</span>, <span class="ang">&lt;</span>head<span class="ang">&gt;</span> y <span class="ang">&lt;</span>body<span class="ang">&gt;</span></h2>
+      <span class="categoria">Estructura</span>
+    </header>
+    <p class="definicion">El esqueleto de todo documento: <code>&lt;html&gt;</code> envuelve todo, <code>&lt;head&gt;</code> guarda la información <em>sobre</em> la página (que no se ve) y <code>&lt;body&gt;</code> contiene todo lo visible.</p>
+    <p class="uso"><strong>Cuándo usarlas:</strong> siempre. Todo archivo HTML empieza con esta estructura. El <code>&lt;!DOCTYPE html&gt;</code> de la primera línea le avisa al navegador que es HTML moderno (HTML5).</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>lang</th><td>En <code>&lt;html&gt;</code>: idioma de la página (<code>"es"</code>). Ayuda a lectores de pantalla y traductores.</td></tr>
+      <tr><th>charset</th><td>En <code>&lt;meta&gt;</code>: codificación de caracteres. Con <code>"UTF-8"</code> funcionan tildes y ñ.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- Estructura mínima de toda página --&gt;</span>
+<span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="v">"es"</span><span class="t">&gt;</span>
+  <span class="t">&lt;head&gt;</span>
+    <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="v">"UTF-8"</span><span class="t">&gt;</span>
+    <span class="t">&lt;title&gt;</span>Mi sitio<span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;/head&gt;</span>
+  <span class="t">&lt;body&gt;</span>
+    <span class="c">&lt;!-- Todo lo visible va acá --&gt;</span>
+  <span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+      <div class="resultado">
+        <p style="font-size:.9rem;color:#5b6674">El <code>&lt;title&gt;</code> no se ve en la página: aparece en la pestaña del navegador y en los resultados de Google. 👆</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="estructura" data-tag="div contenedor" style="--cat:var(--cat-estructura)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>div<span class="ang">&gt;</span></h2>
+      <span class="categoria">Estructura</span>
+      <span class="cierre">requiere cierre &lt;/div&gt;</span>
+    </header>
+    <p class="definicion">Contenedor genérico <strong>sin significado propio</strong>. Sirve para agrupar elementos y darles estilo o layout con CSS.</p>
+    <p class="uso"><strong>Cuándo usarlo:</strong> cuando ninguna etiqueta semántica (<code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>…) describe mejor el contenido. Regla práctica: primero pensá si hay una etiqueta con significado; si no, usá <code>&lt;div&gt;</code>.</p>
+    <table class="atributos">
+      <caption>Atributos importantes (globales: sirven en casi todas las etiquetas)</caption>
+      <tr><th>class</th><td>Nombre para agrupar y dar estilo con CSS. Puede repetirse en varios elementos.</td></tr>
+      <tr><th>id</th><td>Identificador <em>único</em> en la página. Sirve para CSS, JavaScript y anclas (<code>#seccion</code>).</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- Agrupamos una "tarjeta" para estilarla --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"tarjeta"</span><span class="t">&gt;</span>
+  <span class="t">&lt;h3&gt;</span>Curso de HTML<span class="t">&lt;/h3&gt;</span>
+  <span class="t">&lt;p&gt;</span>Aprendé desde cero.<span class="t">&lt;/p&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+      <div class="resultado">
+        <div style="border:1px solid #dde2e8;border-radius:8px;padding:.7rem 1rem;box-shadow:0 2px 5px rgba(0,0,0,.06)">
+          <h3 style="margin:0;font-size:1rem">Curso de HTML</h3>
+          <p style="margin:.2rem 0 0;font-size:.9rem">Aprendé desde cero.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ════════════════ SEMÁNTICAS ════════════════ -->
+  <h2 class="separador" data-cat="semantica">Etiquetas semánticas</h2>
+
+  <article class="ficha" data-cat="semantica" data-tag="header nav main footer semantica encabezado navegacion pie" style="--cat:var(--cat-semantica)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>header<span class="ang">&gt;</span>, <span class="ang">&lt;</span>nav<span class="ang">&gt;</span>, <span class="ang">&lt;</span>main<span class="ang">&gt;</span> y <span class="ang">&lt;</span>footer<span class="ang">&gt;</span></h2>
+      <span class="categoria">Semánticas</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion">Las cuatro zonas principales de una página: <code>&lt;header&gt;</code> el encabezado (logo, título), <code>&lt;nav&gt;</code> el menú de navegación, <code>&lt;main&gt;</code> el contenido principal y <code>&lt;footer&gt;</code> el pie (créditos, contacto).</p>
+    <p class="uso"><strong>Cuándo usarlas:</strong> en toda página, como reemplazo de los viejos <code>&lt;div id="header"&gt;</code>. Funcionan igual que un div, pero le dicen al navegador, a Google y a los lectores de pantalla <em>qué es</em> cada zona. Regla clave: <strong>un solo <code>&lt;main&gt;</code> por página</strong>, y nunca adentro de header, nav o footer.</p>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;body&gt;</span>
+  <span class="t">&lt;header&gt;</span>
+    <span class="t">&lt;h1&gt;</span>Mi sitio<span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;nav&gt;</span> <span class="c">&lt;!-- el menú va DENTRO o fuera del header --&gt;</span>
+      <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;</span>
+      <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Contacto<span class="t">&lt;/a&gt;</span>
+    <span class="t">&lt;/nav&gt;</span>
+  <span class="t">&lt;/header&gt;</span>
+  <span class="t">&lt;main&gt;</span>
+    <span class="c">&lt;!-- el contenido de la página --&gt;</span>
+  <span class="t">&lt;/main&gt;</span>
+  <span class="t">&lt;footer&gt;</span>© 2026 Mi sitio<span class="t">&lt;/footer&gt;</span>
+<span class="t">&lt;/body&gt;</span></pre>
+      <div class="resultado">
+        <div style="border:2px solid #16a34a;border-radius:6px;font-family:var(--mono);font-size:.72rem;font-weight:700;overflow:hidden">
+          <div style="background:#dcfce7;padding:.35rem .6rem;border-bottom:1px solid #16a34a">&lt;header&gt; <span style="font-weight:400">— título y logo</span>
+            <div style="background:#bbf7d0;margin-top:.3rem;padding:.25rem .5rem;border-radius:4px">&lt;nav&gt; <span style="font-weight:400">— menú</span></div>
+          </div>
+          <div style="padding:.9rem .6rem;border-bottom:1px solid #16a34a">&lt;main&gt; <span style="font-weight:400">— contenido principal</span></div>
+          <div style="background:#dcfce7;padding:.35rem .6rem">&lt;footer&gt; <span style="font-weight:400">— pie de página</span></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="semantica" data-tag="section article aside figure figcaption semantica seccion articulo" style="--cat:var(--cat-semantica)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>section<span class="ang">&gt;</span>, <span class="ang">&lt;</span>article<span class="ang">&gt;</span> y <span class="ang">&lt;</span>aside<span class="ang">&gt;</span></h2>
+      <span class="categoria">Semánticas</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion">Organizan el contenido <em>dentro</em> de <code>&lt;main&gt;</code>: <code>&lt;section&gt;</code> agrupa por tema, <code>&lt;article&gt;</code> encierra contenido independiente y completo en sí mismo, y <code>&lt;aside&gt;</code> guarda lo relacionado pero secundario (tips, barra lateral, publicidad).</p>
+    <p class="uso"><strong>Cuándo usar cada una — la pregunta clave:</strong> ¿si copio esto solo a otro sitio, tiene sentido? Si sí (una noticia, una tarjeta de producto, una receta) → <code>&lt;article&gt;</code>. ¿Es un tema con título propio dentro de la página? → <code>&lt;section&gt;</code>. ¿Es una nota al margen? → <code>&lt;aside&gt;</code>. ¿Nada de eso aplica? → recién ahí, <code>&lt;div&gt;</code>.</p>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;main&gt;</span>
+  <span class="t">&lt;section&gt;</span> <span class="c">&lt;!-- tema: novedades --&gt;</span>
+    <span class="t">&lt;h2&gt;</span>Novedades<span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;article&gt;</span> <span class="c">&lt;!-- una noticia completa --&gt;</span>
+      <span class="t">&lt;h3&gt;</span>Abrió la inscripción<span class="t">&lt;/h3&gt;</span>
+      <span class="t">&lt;p&gt;</span>Ya podés anotarte...<span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;/article&gt;</span>
+  <span class="t">&lt;/section&gt;</span>
+  <span class="t">&lt;aside&gt;</span> <span class="c">&lt;!-- dato lateral --&gt;</span>
+    <span class="t">&lt;p&gt;</span>💡 Cupos limitados<span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/aside&gt;</span>
+<span class="t">&lt;/main&gt;</span></pre>
+      <div class="resultado">
+        <div style="border:2px dashed #16a34a;border-radius:6px;padding:.5rem;font-size:.8rem">
+          <div style="font-family:var(--mono);font-size:.68rem;font-weight:700;color:#16a34a">&lt;section&gt;</div>
+          <strong>Novedades</strong>
+          <div style="border:1px solid #dde2e8;border-radius:6px;padding:.4rem .6rem;margin:.3rem 0;background:#fff">
+            <div style="font-family:var(--mono);font-size:.68rem;font-weight:700;color:#16a34a">&lt;article&gt;</div>
+            <strong style="font-size:.85rem">Abrió la inscripción</strong>
+            <p style="margin:0;font-size:.8rem">Ya podés anotarte...</p>
+          </div>
+        </div>
+        <div style="border:2px dashed #d97706;border-radius:6px;padding:.4rem .6rem;margin-top:.4rem;font-size:.8rem;background:#fff8e6">
+          <div style="font-family:var(--mono);font-size:.68rem;font-weight:700;color:#d97706">&lt;aside&gt;</div>
+          💡 Cupos limitados
+        </div>
+      </div>
+    </div>
+    <aside class="nota">📝 Para profundizar en semántica con un mapa interactivo, usá la sección 3 del <strong>Laboratorio CSS</strong>: estas dos guías son compañeras.</aside>
+  </article>
+
+  <!-- ════════════════ TEXTO ════════════════ -->
+  <h2 class="separador" data-cat="texto">Texto</h2>
+
+  <article class="ficha" data-cat="texto" data-tag="h1 h2 h3 h4 h5 h6 titulos encabezados" style="--cat:var(--cat-texto)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>h1<span class="ang">&gt;</span> a <span class="ang">&lt;</span>h6<span class="ang">&gt;</span></h2>
+      <span class="categoria">Texto</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion">Títulos y subtítulos en 6 niveles de jerarquía. <code>&lt;h1&gt;</code> es el más importante y <code>&lt;h6&gt;</code> el menos.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> para estructurar el contenido como un índice, no para "hacer letra grande" (eso es trabajo del CSS). Regla de oro: <strong>un solo <code>&lt;h1&gt;</code> por página</strong> y sin saltear niveles (de h2 pasás a h3, no a h5).</p>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;h1&gt;</span>Mi receta de pizza<span class="t">&lt;/h1&gt;</span>   <span class="c">&lt;!-- título principal --&gt;</span>
+<span class="t">&lt;h2&gt;</span>Ingredientes<span class="t">&lt;/h2&gt;</span>        <span class="c">&lt;!-- sección --&gt;</span>
+<span class="t">&lt;h3&gt;</span>Para la masa<span class="t">&lt;/h3&gt;</span>       <span class="c">&lt;!-- subsección --&gt;</span></pre>
+      <div class="resultado">
+        <div style="font-size:1.5rem;font-weight:800;line-height:1.2">Mi receta de pizza</div>
+        <div style="font-size:1.2rem;font-weight:700;margin-top:.3rem">Ingredientes</div>
+        <div style="font-size:1rem;font-weight:700;margin-top:.2rem">Para la masa</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="texto" data-tag="p parrafo br hr salto linea" style="--cat:var(--cat-texto)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>p<span class="ang">&gt;</span>, <span class="ang">&lt;</span>br<span class="ang">&gt;</span> y <span class="ang">&lt;</span>hr<span class="ang">&gt;</span></h2>
+      <span class="categoria">Texto</span>
+      <span class="cierre">br y hr NO se cierran</span>
+    </header>
+    <p class="definicion"><code>&lt;p&gt;</code> define un párrafo. <code>&lt;br&gt;</code> fuerza un salto de línea. <code>&lt;hr&gt;</code> dibuja una línea horizontal de separación temática.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> <code>&lt;p&gt;</code> para todo bloque de texto. <code>&lt;br&gt;</code> solo cuando el salto es parte del contenido (una dirección, un poema) — <em>no</em> para separar párrafos ni "hacer espacio" (para eso está <code>margin</code> en CSS).</p>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;p&gt;</span>Primer párrafo.<span class="t">&lt;/p&gt;</span>
+<span class="t">&lt;hr&gt;</span>  <span class="c">&lt;!-- separador, no se cierra --&gt;</span>
+<span class="t">&lt;p&gt;</span>Av. Libertador 450<span class="t">&lt;br&gt;</span>San Juan, Argentina<span class="t">&lt;/p&gt;</span></pre>
+      <div class="resultado">
+        <p style="margin:0">Primer párrafo.</p>
+        <hr style="margin:.5rem 0;border:none;border-top:1px solid #ccc">
+        <p style="margin:0">Av. Libertador 450<br>San Juan, Argentina</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="texto" data-tag="strong em b i span negrita cursiva enfasis" style="--cat:var(--cat-texto)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>strong<span class="ang">&gt;</span>, <span class="ang">&lt;</span>em<span class="ang">&gt;</span> y <span class="ang">&lt;</span>span<span class="ang">&gt;</span></h2>
+      <span class="categoria">Texto</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion"><code>&lt;strong&gt;</code> marca importancia (se ve en negrita), <code>&lt;em&gt;</code> marca énfasis (se ve en cursiva) y <code>&lt;span&gt;</code> es el "div del texto": un contenedor en línea sin significado, para estilar una parte de una frase.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> <code>&lt;strong&gt;</code> y <code>&lt;em&gt;</code> cuando el texto realmente es importante o enfático (los lectores de pantalla cambian la entonación). <code>&lt;span&gt;</code> cuando solo querés pintar o estilar un pedacito con CSS.</p>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;p&gt;</span>La entrega es <span class="t">&lt;strong&gt;</span>obligatoria<span class="t">&lt;/strong&gt;</span>
+y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> rápido:
+<span class="t">&lt;span</span> <span class="a">style</span>=<span class="v">"color:crimson"</span><span class="t">&gt;</span>24 hs<span class="t">&lt;/span&gt;</span>.<span class="t">&lt;/p&gt;</span></pre>
+      <div class="resultado">
+        <p style="margin:0">La entrega es <strong>obligatoria</strong> y llega <em>muy</em> rápido: <span style="color:crimson">24 hs</span>.</p>
+      </div>
+    </div>
+    <aside class="nota">📝 Existen <code>&lt;b&gt;</code> y <code>&lt;i&gt;</code> que se ven igual, pero <code>&lt;strong&gt;</code> y <code>&lt;em&gt;</code> son preferibles porque transmiten <em>significado</em>, no solo apariencia.</aside>
+  </article>
+
+  <!-- ════════════════ LISTAS ════════════════ -->
+  <h2 class="separador" data-cat="listas">Listas</h2>
+
+  <article class="ficha" data-cat="listas" data-tag="ul ol li lista ordenada desordenada viñetas" style="--cat:var(--cat-listas)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>ul<span class="ang">&gt;</span>, <span class="ang">&lt;</span>ol<span class="ang">&gt;</span> y <span class="ang">&lt;</span>li<span class="ang">&gt;</span></h2>
+      <span class="categoria">Listas</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion"><code>&lt;ul&gt;</code> crea una lista con viñetas (<em>unordered</em>), <code>&lt;ol&gt;</code> una numerada (<em>ordered</em>) y <code>&lt;li&gt;</code> es cada ítem (<em>list item</em>) de ambas.</p>
+    <p class="uso"><strong>Cuándo usarlas:</strong> <code>&lt;ul&gt;</code> cuando el orden no importa (ingredientes, menú de navegación), <code>&lt;ol&gt;</code> cuando sí importa (pasos de una receta, ranking). Los <code>&lt;li&gt;</code> solo pueden ser hijos directos de <code>&lt;ul&gt;</code> u <code>&lt;ol&gt;</code>.</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>start</th><td>En <code>&lt;ol&gt;</code>: número inicial. <code>start="5"</code> arranca en 5.</td></tr>
+      <tr><th>type</th><td>En <code>&lt;ol&gt;</code>: estilo de numeración (<code>"1"</code>, <code>"a"</code>, <code>"A"</code>, <code>"i"</code>).</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- Sin orden: viñetas --&gt;</span>
+<span class="t">&lt;ul&gt;</span>
+  <span class="t">&lt;li&gt;</span>Harina<span class="t">&lt;/li&gt;</span>
+  <span class="t">&lt;li&gt;</span>Agua<span class="t">&lt;/li&gt;</span>
+<span class="t">&lt;/ul&gt;</span>
+<span class="c">&lt;!-- Con orden: números --&gt;</span>
+<span class="t">&lt;ol&gt;</span>
+  <span class="t">&lt;li&gt;</span>Mezclar<span class="t">&lt;/li&gt;</span>
+  <span class="t">&lt;li&gt;</span>Hornear<span class="t">&lt;/li&gt;</span>
+<span class="t">&lt;/ol&gt;</span></pre>
+      <div class="resultado">
+        <ul style="margin:0 0 .5rem 1.2rem"><li>Harina</li><li>Agua</li></ul>
+        <ol style="margin:0 0 0 1.2rem"><li>Mezclar</li><li>Hornear</li></ol>
+      </div>
+    </div>
+  </article>
+
+  <!-- ════════════════ ENLACES Y MEDIOS ════════════════ -->
+  <h2 class="separador" data-cat="medios">Enlaces y medios</h2>
+
+  <article class="ficha" data-cat="medios" data-tag="a enlace link href ancla" style="--cat:var(--cat-medios)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>a<span class="ang">&gt;</span></h2>
+      <span class="categoria">Enlaces y medios</span>
+      <span class="cierre">requiere cierre &lt;/a&gt;</span>
+    </header>
+    <p class="definicion">Crea un enlace (<em>anchor</em>, ancla) hacia otra página, otra sección de la misma página, un mail o un archivo.</p>
+    <p class="uso"><strong>Cuándo usarlo:</strong> para toda navegación. El texto del enlace debería describir a dónde va ("Ver precios") y no ser un "click acá".</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>href</th><td>El destino: una URL (<code>"https://…"</code>), un ancla (<code>"#contacto"</code>) o un mail (<code>"mailto:hola@…"</code>). Sin href, el enlace no enlaza a nada.</td></tr>
+      <tr><th>target</th><td><code>"_blank"</code> abre en pestaña nueva. Conviene acompañarlo con <code>rel="noopener"</code> por seguridad.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- Enlace externo en pestaña nueva --&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"https://developer.mozilla.org"</span>
+   <span class="a">target</span>=<span class="v">"_blank"</span> <span class="a">rel</span>=<span class="v">"noopener"</span><span class="t">&gt;</span>
+  Documentación MDN
+<span class="t">&lt;/a&gt;</span></pre>
+      <div class="resultado">
+        <a href="https://developer.mozilla.org" target="_blank" rel="noopener">Documentación MDN</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="medios" data-tag="img imagen src alt foto" style="--cat:var(--cat-medios)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>img<span class="ang">&gt;</span></h2>
+      <span class="categoria">Enlaces y medios</span>
+      <span class="cierre">NO se cierra</span>
+    </header>
+    <p class="definicion">Inserta una imagen. Es una etiqueta <strong>vacía</strong>: no tiene contenido ni cierre, toda su información va en atributos.</p>
+    <p class="uso"><strong>Cuándo usarla:</strong> para imágenes que son contenido (fotos, logos, ilustraciones). Si la imagen es pura decoración, muchas veces conviene ponerla como fondo con CSS (<code>background-image</code>).</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>src</th><td><strong>Obligatorio.</strong> Ruta del archivo: relativa (<code>"img/logo.png"</code>) o URL completa.</td></tr>
+      <tr><th>alt</th><td><strong>Siempre ponelo.</strong> Texto alternativo: lo leen los lectores de pantalla y aparece si la imagen no carga. Clave para accesibilidad y SEO.</td></tr>
+      <tr><th>width / height</th><td>Dimensiones en píxeles. Declararlas evita que la página "salte" mientras carga.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;img</span> <span class="a">src</span>=<span class="v">"gatito.jpg"</span>
+     <span class="a">alt</span>=<span class="v">"Gato naranja durmiendo"</span>
+     <span class="a">width</span>=<span class="v">"200"</span><span class="t">&gt;</span></pre>
+      <div class="resultado">
+        <svg width="200" height="120" viewBox="0 0 200 120" role="img" aria-label="Gato naranja durmiendo (ilustración de ejemplo)" style="border-radius:6px">
+          <rect width="200" height="120" fill="#dbeafe"/>
+          <ellipse cx="100" cy="85" rx="55" ry="26" fill="#f59e0b"/>
+          <circle cx="140" cy="70" r="20" fill="#f59e0b"/>
+          <path d="M128 56 l-6 -12 10 4 z M152 56 l6 -12 -10 4 z" fill="#f59e0b"/>
+          <path d="M133 72 q3 3 6 0 M143 72 q3 3 6 0" stroke="#7c2d12" fill="none" stroke-width="2" stroke-linecap="round"/>
+          <path d="M45 88 q-14 -6 -8 -20" stroke="#f59e0b" fill="none" stroke-width="8" stroke-linecap="round"/>
+          <text x="12" y="18" font-size="10" fill="#5b6674" font-family="monospace">gatito.jpg</text>
+        </svg>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="medios" data-tag="video audio source multimedia controls" style="--cat:var(--cat-medios)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>video<span class="ang">&gt;</span> y <span class="ang">&lt;</span>audio<span class="ang">&gt;</span></h2>
+      <span class="categoria">Enlaces y medios</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion">Reproducen video y audio directamente en la página, sin plugins.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> para archivos propios (mp4, mp3, webm). Para YouTube se usa el <code>&lt;iframe&gt;</code> que da el propio botón "Compartir → Insertar".</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>src</th><td>Ruta del archivo de video o audio.</td></tr>
+      <tr><th>controls</th><td>Muestra los botones de play, pausa y volumen. Sin esto, ¡no hay forma de reproducir!</td></tr>
+      <tr><th>autoplay / loop / muted</th><td>Reproducción automática, en bucle, sin sonido. Los navegadores solo permiten autoplay si está <code>muted</code>.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;video</span> <span class="a">src</span>=<span class="v">"clase.mp4"</span> <span class="a">controls</span>
+       <span class="a">width</span>=<span class="v">"320"</span><span class="t">&gt;</span>
+  Tu navegador no soporta video.
+<span class="t">&lt;/video&gt;</span></pre>
+      <div class="resultado">
+        <div style="width:100%;max-width:280px;aspect-ratio:16/9;background:#1c2530;border-radius:8px;display:flex;justify-content:center;align-items:center;color:#fff">
+          <span style="font-size:2rem">▶️</span>
+        </div>
+        <p style="font-size:.8rem;color:#5b6674;margin:.4rem 0 0">Vista simulada del reproductor</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ficha" data-cat="medios" data-tag="iframe youtube maps embed insertar incrustar" style="--cat:var(--cat-medios)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>iframe<span class="ang">&gt;</span></h2>
+      <span class="categoria">Enlaces y medios</span>
+      <span class="cierre">requiere cierre &lt;/iframe&gt;</span>
+    </header>
+    <p class="definicion">Incrusta <strong>otra página web adentro de la tuya</strong>, como una ventana. Es lo que usás para meter un video de YouTube, un mapa de Google Maps o un formulario de Google Forms.</p>
+    <p class="uso"><strong>Cuándo usarlo:</strong> cuando el contenido vive en otro sitio y ese sitio te da el código para insertar. En YouTube: <em>Compartir → Insertar</em> y copiás el iframe entero. En Google Maps: <em>Compartir → Insertar un mapa</em>. No hace falta escribirlo de memoria: los sitios te lo generan.</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>src</th><td>La URL de la página a incrustar. Ojo: para YouTube tiene que ser la URL de <em>embed</em> (<code>youtube.com/embed/ID</code>), no la del video normal.</td></tr>
+      <tr><th>width / height</th><td>Tamaño de la "ventana" en píxeles (o con CSS, mejor).</td></tr>
+      <tr><th>allowfullscreen</th><td>Permite que el video se vea en pantalla completa.</td></tr>
+      <tr><th>loading</th><td>Con <code>"lazy"</code>, el iframe se carga recién cuando el usuario llega hasta él: la página carga más rápido.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- Video de YouTube insertado --&gt;</span>
+<span class="t">&lt;iframe</span>
+  <span class="a">src</span>=<span class="v">"https://www.youtube.com/embed/VIDEO_ID"</span>
+  <span class="a">width</span>=<span class="v">"320"</span> <span class="a">height</span>=<span class="v">"180"</span>
+  <span class="a">loading</span>=<span class="v">"lazy"</span>
+  <span class="a">allowfullscreen</span><span class="t">&gt;</span>
+<span class="t">&lt;/iframe&gt;</span></pre>
+      <div class="resultado">
+        <div style="width:100%;max-width:280px;aspect-ratio:16/9;background:#1c2530;border-radius:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;position:relative">
+          <div style="width:52px;height:36px;background:#f00;border-radius:8px;display:flex;justify-content:center;align-items:center">▶</div>
+          <span style="font-size:.7rem;color:#b9c4d0;margin-top:.5rem">Video de otro sitio, dentro del tuyo</span>
+        </div>
+        <p style="font-size:.8rem;color:#5b6674;margin:.4rem 0 0">Vista simulada del embed</p>
+      </div>
+    </div>
+    <aside class="nota">⚠️ No todos los sitios se dejan incrustar: algunos lo bloquean por seguridad y el iframe aparece vacío o con error. YouTube, Maps y Google Forms sí lo permiten.</aside>
+  </article>
+
+  <!-- ════════════════ TABLAS ════════════════ -->
+  <h2 class="separador" data-cat="tablas">Tablas</h2>
+
+  <article class="ficha" data-cat="tablas" data-tag="table tr td th thead tbody tabla fila celda" style="--cat:var(--cat-tablas)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>table<span class="ang">&gt;</span>, <span class="ang">&lt;</span>tr<span class="ang">&gt;</span>, <span class="ang">&lt;</span>th<span class="ang">&gt;</span> y <span class="ang">&lt;</span>td<span class="ang">&gt;</span></h2>
+      <span class="categoria">Tablas</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion"><code>&lt;table&gt;</code> crea la tabla, <code>&lt;tr&gt;</code> cada fila (<em>table row</em>), <code>&lt;th&gt;</code> las celdas de encabezado (<em>table header</em>, en negrita) y <code>&lt;td&gt;</code> las celdas de datos (<em>table data</em>).</p>
+    <p class="uso"><strong>Cuándo usarlas:</strong> solo para <strong>datos tabulares</strong> (horarios, precios, notas). Nunca para maquetar la página — para eso están flexbox y grid.</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>colspan</th><td>Hace que una celda ocupe varias columnas: <code>colspan="2"</code>.</td></tr>
+      <tr><th>rowspan</th><td>Hace que una celda ocupe varias filas.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;table&gt;</span>
+  <span class="t">&lt;tr&gt;</span>              <span class="c">&lt;!-- fila 1: encabezados --&gt;</span>
+    <span class="t">&lt;th&gt;</span>Día<span class="t">&lt;/th&gt;</span> <span class="t">&lt;th&gt;</span>Clase<span class="t">&lt;/th&gt;</span>
+  <span class="t">&lt;/tr&gt;</span>
+  <span class="t">&lt;tr&gt;</span>              <span class="c">&lt;!-- fila 2: datos --&gt;</span>
+    <span class="t">&lt;td&gt;</span>Lunes<span class="t">&lt;/td&gt;</span> <span class="t">&lt;td&gt;</span>HTML<span class="t">&lt;/td&gt;</span>
+  <span class="t">&lt;/tr&gt;</span>
+<span class="t">&lt;/table&gt;</span></pre>
+      <div class="resultado">
+        <table><tr><th>Día</th><th>Clase</th></tr><tr><td>Lunes</td><td>HTML</td></tr></table>
+      </div>
+    </div>
+  </article>
+
+  <!-- ════════════════ FORMULARIOS ════════════════ -->
+  <h2 class="separador" data-cat="forms">Formularios</h2>
+
+  <article class="ficha" data-cat="forms" data-tag="form input label placeholder type formulario" style="--cat:var(--cat-forms)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>form<span class="ang">&gt;</span>, <span class="ang">&lt;</span>input<span class="ang">&gt;</span> y <span class="ang">&lt;</span>label<span class="ang">&gt;</span></h2>
+      <span class="categoria">Formularios</span>
+      <span class="cierre">input NO se cierra</span>
+    </header>
+    <p class="definicion"><code>&lt;form&gt;</code> agrupa los campos y define a dónde se envían. <code>&lt;input&gt;</code> es el campo en sí (cambia según su <code>type</code>). <code>&lt;label&gt;</code> es la etiqueta visible del campo.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> para todo dato que ingresa el usuario. Conectá cada <code>&lt;label&gt;</code> con su <code>&lt;input&gt;</code> usando <code>for</code> + <code>id</code>: así, al tocar la etiqueta, se activa el campo (clave en celulares).</p>
+    <table class="atributos">
+      <caption>Atributos importantes de &lt;input&gt;</caption>
+      <tr><th>type</th><td>El tipo de campo: <code>text</code>, <code>email</code>, <code>password</code>, <code>number</code>, <code>date</code>, <code>checkbox</code>, <code>radio</code>… ¡El mismo input se transforma!</td></tr>
+      <tr><th>name</th><td>Nombre con el que viaja el dato al enviarse. Sin <code>name</code>, el dato no se envía.</td></tr>
+      <tr><th>placeholder</th><td>Texto gris de ejemplo dentro del campo. No reemplaza al label.</td></tr>
+      <tr><th>required</th><td>Impide enviar el formulario si el campo está vacío.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;form&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"correo"</span><span class="t">&gt;</span>Tu email<span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"email"</span> <span class="a">id</span>=<span class="v">"correo"</span>
+         <span class="a">name</span>=<span class="v">"correo"</span>
+         <span class="a">placeholder</span>=<span class="v">"vos@mail.com"</span>
+         <span class="a">required</span><span class="t">&gt;</span>
+<span class="t">&lt;/form&gt;</span></pre>
+      <div class="resultado">
+        <label for="demoCorreo">Tu email</label>
+        <input type="email" id="demoCorreo" placeholder="vos@mail.com">
+        <label for="demoNum">Edad <small style="font-weight:400;color:#5b6674">(type="number")</small></label>
+        <input type="number" id="demoNum" min="0" max="120" placeholder="25" style="width:90px">
+        <label for="demoFecha">Fecha <small style="font-weight:400;color:#5b6674">(type="date")</small></label>
+        <input type="date" id="demoFecha">
+        <label for="demoPass">Contraseña <small style="font-weight:400;color:#5b6674">(type="password")</small></label>
+        <input type="password" id="demoPass" value="secreto123">
+        <label for="demoColor">Color <small style="font-weight:400;color:#5b6674">(type="color")</small></label>
+        <input type="color" id="demoColor" value="#2563eb" style="width:60px;height:34px;padding:2px">
+      </div>
+    </div>
+    <aside class="nota">🛠️ <strong>Patrón muy usado en la práctica:</strong> envolver cada label + input en un <code>&lt;div class="campo"&gt;</code>. El div no aporta semántica, pero te da un "gancho" para estilar cada campo completo con CSS (margen entre campos, layout en columnas, mensajes de error debajo):
+      <pre style="background:var(--codigo-bg);color:var(--codigo-tx);font-family:var(--mono);font-size:.75rem;border-radius:6px;padding:.6rem .8rem;margin-top:.5rem;overflow-x:auto"><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"campo"</span><span class="t">&gt;</span>   <span class="c">&lt;!-- un gancho de estilo por campo --&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"nombre"</span><span class="t">&gt;</span>Nombre<span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"text"</span> <span class="a">id</span>=<span class="v">"nombre"</span> <span class="a">name</span>=<span class="v">"nombre"</span><span class="t">&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+      Y en CSS: <code>.campo{ margin-bottom: 1rem; }</code> — un solo selector ordena todo el formulario.
+    </aside>
+  </article>
+
+  <article class="ficha" data-cat="forms" data-tag="radio checkbox casilla opcion input type marcar seleccionar" style="--cat:var(--cat-forms)">
+    <header class="ficha-top">
+      <h2>input <span class="ang">type=</span>"radio" y <span class="ang">type=</span>"checkbox"</h2>
+      <span class="categoria">Formularios</span>
+      <span class="cierre">NO se cierran</span>
+    </header>
+    <p class="definicion">Dos tipos especiales de <code>&lt;input&gt;</code>: <strong>radio</strong> permite elegir <em>una sola</em> opción de un grupo (como los botones de una radio vieja: apretás uno y se suelta el otro). <strong>checkbox</strong> permite marcar <em>varias</em> a la vez, o funcionar solo (ej: "Acepto los términos").</p>
+    <p class="uso"><strong>La clave de los radio:</strong> todos los del mismo grupo comparten el mismo <code>name</code> — así el navegador sabe que son excluyentes entre sí. Si les ponés names distintos, se pueden marcar todos a la vez (error clásico 😅). Cada uno lleva su propio <code>value</code>, que es el dato que se envía.</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>name</th><td>En radio: <strong>igual para todo el grupo</strong> (los vuelve excluyentes). En checkbox: puede repetirse si son opciones del mismo tema.</td></tr>
+      <tr><th>value</th><td>El dato que viaja al enviar. El usuario ve el label, pero se envía el value.</td></tr>
+      <tr><th>checked</th><td>Lo deja marcado por defecto al cargar la página.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="c">&lt;!-- RADIO: una sola opción (mismo name) --&gt;</span>
+<span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"radio"</span> <span class="a">name</span>=<span class="v">"turno"</span>
+       <span class="a">id</span>=<span class="v">"tm"</span> <span class="a">value</span>=<span class="v">"mañana"</span> <span class="a">checked</span><span class="t">&gt;</span>
+<span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"tm"</span><span class="t">&gt;</span>Mañana<span class="t">&lt;/label&gt;</span>
+
+<span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"radio"</span> <span class="a">name</span>=<span class="v">"turno"</span>
+       <span class="a">id</span>=<span class="v">"tt"</span> <span class="a">value</span>=<span class="v">"tarde"</span><span class="t">&gt;</span>
+<span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"tt"</span><span class="t">&gt;</span>Tarde<span class="t">&lt;/label&gt;</span>
+
+<span class="c">&lt;!-- CHECKBOX: varias opciones --&gt;</span>
+<span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"checkbox"</span> <span class="a">name</span>=<span class="v">"lenguajes"</span>
+       <span class="a">id</span>=<span class="v">"ht"</span> <span class="a">value</span>=<span class="v">"html"</span><span class="t">&gt;</span>
+<span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"ht"</span><span class="t">&gt;</span>HTML<span class="t">&lt;/label&gt;</span>
+
+<span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"checkbox"</span> <span class="a">name</span>=<span class="v">"lenguajes"</span>
+       <span class="a">id</span>=<span class="v">"cs"</span> <span class="a">value</span>=<span class="v">"css"</span><span class="t">&gt;</span>
+<span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"cs"</span><span class="t">&gt;</span>CSS<span class="t">&lt;/label&gt;</span></pre>
+      <div class="resultado">
+        <p style="margin:0 0 .2rem;font-size:.8rem;font-weight:700;color:#5b6674">¿Qué turno preferís? (elegí uno)</p>
+        <label style="display:inline;font-weight:400"><input type="radio" name="demoTurno" checked style="width:auto"> Mañana</label>
+        <label style="display:inline;font-weight:400;margin-left:.8rem"><input type="radio" name="demoTurno" style="width:auto"> Tarde</label>
+        <p style="margin:.8rem 0 .2rem;font-size:.8rem;font-weight:700;color:#5b6674">¿Qué sabés? (marcá todas)</p>
+        <label style="display:inline;font-weight:400"><input type="checkbox" style="width:auto"> HTML</label>
+        <label style="display:inline;font-weight:400;margin-left:.8rem"><input type="checkbox" style="width:auto"> CSS</label>
+      </div>
+    </div>
+    <aside class="nota">💡 Probá el resultado de arriba: los radio se destraban entre sí (mismo <code>name</code>), los checkbox no. Y gracias al <code>label</code> con <code>for</code>, podés hacer click en el texto, no solo en el circulito.</aside>
+  </article>
+
+  <article class="ficha" data-cat="forms" data-tag="fieldset legend grupo campos agrupar formulario" style="--cat:var(--cat-forms)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>fieldset<span class="ang">&gt;</span> y <span class="ang">&lt;</span>legend<span class="ang">&gt;</span></h2>
+      <span class="categoria">Formularios</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion"><code>&lt;fieldset&gt;</code> agrupa campos relacionados dentro de un formulario (dibuja un recuadro alrededor) y <code>&lt;legend&gt;</code> es el título de ese grupo, que se muestra "montado" sobre el borde.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> en formularios largos, para separar por tema ("Datos personales", "Datos de envío"). Y es <strong>la forma correcta de agrupar radios y checkboxes</strong>: el <code>&lt;legend&gt;</code> hace de pregunta del grupo, y los lectores de pantalla la leen antes de cada opción. A diferencia del <code>&lt;div class="campo"&gt;</code>, acá sí hay semántica: fieldset dice "estos campos van juntos".</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>disabled</th><td>En <code>&lt;fieldset&gt;</code>: desactiva <em>todos</em> los campos del grupo de una sola vez.</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;fieldset&gt;</span>
+  <span class="t">&lt;legend&gt;</span>Nivel de experiencia<span class="t">&lt;/legend&gt;</span>
+
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"radio"</span> <span class="a">name</span>=<span class="v">"nivel"</span>
+         <span class="a">id</span>=<span class="v">"ini"</span> <span class="a">value</span>=<span class="v">"inicial"</span><span class="t">&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"ini"</span><span class="t">&gt;</span>Inicial<span class="t">&lt;/label&gt;</span>
+
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"radio"</span> <span class="a">name</span>=<span class="v">"nivel"</span>
+         <span class="a">id</span>=<span class="v">"avz"</span> <span class="a">value</span>=<span class="v">"avanzado"</span><span class="t">&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"avz"</span><span class="t">&gt;</span>Avanzado<span class="t">&lt;/label&gt;</span>
+<span class="t">&lt;/fieldset&gt;</span></pre>
+      <div class="resultado">
+        <fieldset style="border:1px solid #999;border-radius:6px;padding:.6rem .9rem">
+          <legend style="font-size:.85rem;font-weight:700;padding:0 .4rem">Nivel de experiencia</legend>
+          <label style="display:inline;font-weight:400"><input type="radio" name="demoNivel" style="width:auto"> Inicial</label>
+          <label style="display:inline;font-weight:400;margin-left:.8rem"><input type="radio" name="demoNivel" style="width:auto"> Avanzado</label>
+        </fieldset>
+      </div>
+    </div>
+    <aside class="nota">📝 Los paneles de controles del <strong>Laboratorio CSS</strong> están hechos exactamente con <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> — mirá su código fuente y los vas a reconocer.</aside>
+  </article>
+
+  <article class="ficha" data-cat="forms" data-tag="button boton submit textarea select option" style="--cat:var(--cat-forms)">
+    <header class="ficha-top">
+      <h2><span class="ang">&lt;</span>button<span class="ang">&gt;</span>, <span class="ang">&lt;</span>textarea<span class="ang">&gt;</span> y <span class="ang">&lt;</span>select<span class="ang">&gt;</span></h2>
+      <span class="categoria">Formularios</span>
+      <span class="cierre">requieren cierre</span>
+    </header>
+    <p class="definicion"><code>&lt;button&gt;</code> es un botón clickeable. <code>&lt;textarea&gt;</code> un campo de texto de varias líneas. <code>&lt;select&gt;</code> un menú desplegable cuyas opciones son <code>&lt;option&gt;</code>.</p>
+    <p class="uso"><strong>Cuándo usarlos:</strong> <code>&lt;button&gt;</code> para toda acción (enviar, abrir, calcular). <code>&lt;textarea&gt;</code> para mensajes o comentarios. <code>&lt;select&gt;</code> cuando hay opciones fijas para elegir.</p>
+    <table class="atributos">
+      <caption>Atributos importantes</caption>
+      <tr><th>type</th><td>En <code>&lt;button&gt;</code>: <code>"submit"</code> (envía el form, es el valor por defecto) o <code>"button"</code> (no envía nada, se usa con JavaScript).</td></tr>
+      <tr><th>rows</th><td>En <code>&lt;textarea&gt;</code>: cantidad de líneas visibles.</td></tr>
+      <tr><th>value</th><td>En <code>&lt;option&gt;</code>: el dato que realmente se envía (puede diferir del texto visible).</td></tr>
+    </table>
+    <div class="ejemplo">
+      <pre><span class="t">&lt;select</span> <span class="a">name</span>=<span class="v">"nivel"</span><span class="t">&gt;</span>
+  <span class="t">&lt;option</span> <span class="a">value</span>=<span class="v">"1"</span><span class="t">&gt;</span>Principiante<span class="t">&lt;/option&gt;</span>
+  <span class="t">&lt;option</span> <span class="a">value</span>=<span class="v">"2"</span><span class="t">&gt;</span>Avanzado<span class="t">&lt;/option&gt;</span>
+<span class="t">&lt;/select&gt;</span>
+
+<span class="t">&lt;textarea</span> <span class="a">rows</span>=<span class="v">"3"</span>
+  <span class="a">placeholder</span>=<span class="v">"Tu mensaje..."</span><span class="t">&gt;&lt;/textarea&gt;</span>
+
+<span class="t">&lt;button</span> <span class="a">type</span>=<span class="v">"submit"</span><span class="t">&gt;</span>Enviar<span class="t">&lt;/button&gt;</span></pre>
+      <div class="resultado">
+        <select><option>Principiante</option><option>Avanzado</option></select><br>
+        <textarea rows="3" placeholder="Tu mensaje..." style="width:100%;max-width:220px"></textarea><br>
+        <button type="button">Enviar</button>
+      </div>
+    </div>
+  </article>
+
+  <!-- Mensaje si la búsqueda no encuentra nada -->
+  <div id="sinResultados">
+    <p>😅 No encontramos ninguna etiqueta con ese nombre.</p>
+    <p style="font-size:.85rem">Probá con otro término: <code>img</code>, <code>lista</code>, <code>form</code>…</p>
+  </div>
+</main>
+
+<!-- <footer>: cierre del documento -->
+<footer class="pie">
+  <p>Guía de referencia de <code>&lt;HTML&gt;</code> Desarrollado con ❤️ Profe Vanesa</p>
+</footer>
+
+<script>
+
+
+const buscador = document.getElementById("buscador");
+const chips    = document.querySelectorAll("nav.filtros .chip");
+const fichas   = document.querySelectorAll("article.ficha");
+const separadores = document.querySelectorAll("h2.separador");
+const contador = document.getElementById("contador");
+const sinResultados = document.getElementById("sinResultados");
+
+let categoriaActiva = "todas";   
+
+function filtrar(){
+  const texto = buscador.value.trim().toLowerCase();
+  let visibles = 0;
+
+  fichas.forEach(ficha => {
+    
+    const okCategoria = categoriaActiva === "todas" || ficha.dataset.cat === categoriaActiva;
+   
+    const okBusqueda = texto === "" || ficha.dataset.tag.toLowerCase().includes(texto);
+
+    const mostrar = okCategoria && okBusqueda;
+    ficha.classList.toggle("oculta", !mostrar);
+    if (mostrar) visibles++;
+  });
+
+
+  separadores.forEach(sep => {
+    const hayVisible = [...fichas].some(f =>
+      f.dataset.cat === sep.dataset.cat && !f.classList.contains("oculta"));
+    sep.classList.toggle("oculta", !hayVisible);
+  });
+
+
+  contador.textContent = visibles + (visibles === 1 ? " ficha visible" : " fichas visibles");
+  sinResultados.style.display = visibles === 0 ? "block" : "none";
+}
+
+
+buscador.addEventListener("input", filtrar);
+
+
+chips.forEach(chip => chip.addEventListener("click", () => {
+  chips.forEach(c => c.classList.remove("activo"));
+  chip.classList.add("activo");
+  categoriaActiva = chip.dataset.cat;
+  filtrar();
+}));
+
+filtrar();  
+</script>
+</body>
+</html>

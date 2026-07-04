@@ -1,0 +1,73 @@
+
+:root{
+  --tinta:      #1c2530;   /* color principal de texto */
+  --tinta-suave:#5b6674;
+  --papel:      #f6f7f9;   /* fondo general */
+  --tarjeta:    #ffffff;
+  --linea:      #dde2e8;
+  --acento:     #2563eb;   /* azul de acciones e interacciones */
+  --c-border:   #fedd9a;   /* amarillo (borde en DevTools y cajitas del título) */
+  --codigo-bg:  #1c2530;
+  --codigo-tx:  #e8edf3;
+  --codigo-val: #ffd28e;
+  --codigo-com: #7d8b9c;
+  --mono: ui-monospace, "Cascadia Code", "Fira Code", Consolas, monospace;
+  --radio: 10px;
+}
+
+
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+
+
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--papel);
+  color: var(--tinta);
+  line-height: 1.6;
+}
+
+
+.barra-sitio{
+  display: flex;              
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  background: #11161d;        
+  padding: .5rem 1rem;
+  font-size: .85rem;
+}
+.barra-sitio a{
+  color: #8b98a7;
+  text-decoration: none;
+  font-weight: 600;
+  padding: .15rem .3rem;
+}
+.barra-sitio a:hover{ color: #fff; }
+
+.barra-sitio a[aria-current="page"]{
+  color: #fff;
+  border-bottom: 2px solid var(--acento);
+}
+
+/* ─── Header compartido ─── */
+header.principal{
+  background: var(--tinta);
+  color: #fff;
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+}
+header.principal p{
+  color: #b9c4d0;
+  max-width: 60ch;
+  margin: .8rem auto 0;
+}
+
+/* ─── Footer compartido ─── */
+footer.pie{
+  background: var(--tinta);
+  color: #b9c4d0;
+  text-align: center;
+  padding: 1.6rem 1rem;
+  font-size: .9rem;
+}
+footer.pie code{ font-family: var(--mono); color: #fff; }
