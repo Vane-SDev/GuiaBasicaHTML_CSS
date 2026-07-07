@@ -268,10 +268,34 @@ h2.separador.oculta{ display:none; }
 @media (max-width: 640px){
   article.ficha{ padding: 1.1rem 1rem; }
   .ejemplo pre{ font-size: .72rem; }
+  table.glosario, table.glosario tbody, table.glosario tr,
+  table.glosario th, table.glosario td,
+  table.atributos, table.atributos tbody, table.atributos tr,
+  table.atributos th, table.atributos td{
+    display: block;          /* chau comportamiento de tabla */
+    width: 100%;
+  }
+  table.glosario tr, table.atributos tr{
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+    margin-bottom: .8rem;
+    overflow: hidden;
+  }
+  table.glosario th, table.glosario td,
+  table.atributos th, table.atributos td{
+    border: none;
+    border-bottom: 1px solid var(--linea);
+    white-space: normal;     /* ← el nowrap era el culpable */
+  }
+  table.glosario td:last-child, table.atributos td:last-child{
+    border-bottom: none;
+  }
+  table.glosario td code, table.atributos td code{
+    white-space: normal;     /* los ejemplos también pueden bajar de línea */
+    word-break: break-word;
+  }
 }
 </style>
-</head>
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RELLPXWC37"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -280,6 +304,9 @@ h2.separador.oculta{ display:none; }
 
   gtag('config', 'G-RELLPXWC37');
 </script>
+</head>
+
+
 <body>
 
 
