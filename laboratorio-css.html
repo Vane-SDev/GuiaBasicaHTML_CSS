@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Vanesa Soria · 💻Profe Vane">
+<meta name="description" content="Material interactivo para repasar HTML y CSS: guía de etiquetas con buscador y laboratorio con sliders para experimentar con box model, flexbox y pseudoclases.">
+
+
+<meta property="og:title" content="Repaso HTML + CSS · Material interactivo">
+<meta property="og:description" content="Guía de etiquetas + laboratorio CSS con sliders. Material de clase libre para uso educativo.">
+<meta property="og:type" content="website">
 <title>Laboratorio CSS · Box Model, Flexbox, Pseudoclases y Medidas</title>
 <link rel="stylesheet" href="estilos-base.css">
 <style>
@@ -440,8 +447,14 @@ aside.tip strong{ color: #92600a; }
 }
 </style>
 </head>
-<script data-goatcounter="https://TUCODIGO.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RELLPXWC37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RELLPXWC37');
+</script>
 <body>
 
 
@@ -549,9 +562,6 @@ aside.tip strong{ color: #92600a; }
     </aside>
   </section>
 
-  <!-- ==========================================================
-       SECCIÓN 2 · FLEXBOX
-       ========================================================== -->
   <section class="bloque" id="flexbox">
     <h2>2. Flexbox: el contenedor</h2>
     <p class="intro">
@@ -561,7 +571,6 @@ aside.tip strong{ color: #92600a; }
     </p>
 
     <div class="laboratorio">
-      <!-- Controles del contenedor flex -->
       <div class="controles">
         <fieldset class="grupo">
           <legend>Dirección y eje</legend>
@@ -966,9 +975,6 @@ nav a {
 
 </main>
 
-<!-- ============================================================
-     <footer>
-     ============================================================ -->
 <footer class="pie">
   <p>Hecho con <code>&lt;etiquetas semánticas&gt;</code>, box model y flexbox · Desarrollado con ❤️ Profe Vanesa</p>
 </footer>
@@ -1087,14 +1093,13 @@ $("fxQuitar").addEventListener("click", () => {
   if (cont.children.length > 1) cont.lastElementChild.remove();
 });
 
-/* ---------- 3) FLEX ÍTEMS (propiedades de los HIJOS) ---------- */
 const fiCont  = $("fiContenedor");
 const fiItems = [...fiCont.children];
 
 
 const fiEstado = fiItems.map((el, i) =>
   ({ order: 0, grow: i === 1 ? 1 : 0, shrink: 1, basis: "auto" }));
-let fiSel = 0;   // índice del ítem seleccionado
+let fiSel = 0;   
 
 function pintarFlexItems(){
   fiItems.forEach((el, i) => {
@@ -1137,16 +1142,14 @@ $("fiGrow").addEventListener("input",   () => { fiEstado[fiSel].grow   = +$("fiG
 $("fiShrink").addEventListener("input", () => { fiEstado[fiSel].shrink = +$("fiShrink").value; pintarFlexItems(); });
 $("fiBasis").addEventListener("change", () => { fiEstado[fiSel].basis  =  $("fiBasis").value;  pintarFlexItems(); });
 
-/* ---------- 4) PSEUDOCLASES (:hover con transform + sombra) ---------- */
-
 const hojaHover = document.createElement("style");
 document.head.appendChild(hojaHover);
 
 function pintarHover(){
-  const ty   = +$("psTy").value;                       // cuánto sube
-  const sc   = (+$("psScale").value / 100).toFixed(2); // 103 → 1.03
-  const blur = +$("psBlur").value;                     // difuminado de la sombra
-  const dur  = +$("psDur").value;                      // duración de la transición
+  const ty   = +$("psTy").value;                       
+  const sc   = (+$("psScale").value / 100).toFixed(2); 
+  const blur = +$("psBlur").value;                     
+  const dur  = +$("psDur").value;                      
 
   $("psTyOut").textContent    = ty + "px";
   $("psScaleOut").textContent = sc;
@@ -1181,10 +1184,10 @@ a<span class="prop">:active</span>  { <span class="prop">color</span>: <span cla
 
 ["psTy","psScale","psBlur","psDur"].forEach(id => $(id).addEventListener("input", pintarHover));
 
-/* ---------- 5) MEDIDAS ---------- */
+
 function pintarMedidas(){
-  const w  = +$("mdAncho").value;    // ancho del "padre" (simula la pantalla)
-  const fs = +$("mdFuente").value;   // font-size del padre del texto
+  const w  = +$("mdAncho").value;   
+  const fs = +$("mdFuente").value;   
 
   $("mdAnchoOut").textContent = w + "px";
   $("medPadre").style.width = w + "px";

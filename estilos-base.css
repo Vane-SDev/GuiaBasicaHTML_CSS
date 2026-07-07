@@ -1,12 +1,12 @@
 
 :root{
-  --tinta:      #1c2530;   /* color principal de texto */
+  --tinta:      #1c2530;  
   --tinta-suave:#5b6674;
-  --papel:      #f6f7f9;   /* fondo general */
+  --papel:      #f6f7f9;   
   --tarjeta:    #ffffff;
   --linea:      #dde2e8;
-  --acento:     #2563eb;   /* azul de acciones e interacciones */
-  --c-border:   #fedd9a;   /* amarillo (borde en DevTools y cajitas del título) */
+  --acento:     #2563eb;   
+  --c-border:   #fedd9a;   
   --codigo-bg:  #1c2530;
   --codigo-tx:  #e8edf3;
   --codigo-val: #ffd28e;

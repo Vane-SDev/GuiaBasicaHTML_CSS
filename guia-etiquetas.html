@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Vanesa Soria · 💻Profe Vane">
+<meta name="description" content="Material interactivo para repasar HTML y CSS: guía de etiquetas con buscador y laboratorio con sliders para experimentar con box model, flexbox y pseudoclases.">
+
+
+<meta property="og:title" content="Repaso HTML + CSS · Material interactivo">
+<meta property="og:description" content="Guía de etiquetas + laboratorio CSS con sliders. Material de clase libre para uso educativo.">
+<meta property="og:type" content="website">
 <title>Guía de etiquetas HTML · Referencia básica</title>
 <link rel="stylesheet" href="estilos-base.css">
 <style>
@@ -264,8 +271,15 @@ h2.separador.oculta{ display:none; }
 }
 </style>
 </head>
-<script data-goatcounter="https://TUCODIGO.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RELLPXWC37"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RELLPXWC37');
+</script>
 <body>
 
 
@@ -296,7 +310,6 @@ h2.separador.oculta{ display:none; }
 <main>
   <p class="contador" id="contador"></p>
 
-  <!-- ════════════════ ESTRUCTURA ════════════════ -->
   <h2 class="separador" data-cat="estructura">Estructura del documento</h2>
 
   
@@ -358,7 +371,6 @@ h2.separador.oculta{ display:none; }
     </div>
   </article>
 
-  <!-- ════════════════ SEMÁNTICAS ════════════════ -->
   <h2 class="separador" data-cat="semantica">Etiquetas semánticas</h2>
 
   <article class="ficha" data-cat="semantica" data-tag="header nav main footer semantica encabezado navegacion pie" style="--cat:var(--cat-semantica)">
@@ -435,7 +447,7 @@ h2.separador.oculta{ display:none; }
     <aside class="nota">📝 Para profundizar en semántica con un mapa interactivo, usá la sección 3 del <strong>Laboratorio CSS</strong>: estas dos guías son compañeras.</aside>
   </article>
 
-  <!-- ════════════════ TEXTO ════════════════ -->
+
   <h2 class="separador" data-cat="texto">Texto</h2>
 
   <article class="ficha" data-cat="texto" data-tag="h1 h2 h3 h4 h5 h6 titulos encabezados" style="--cat:var(--cat-texto)">
@@ -497,7 +509,7 @@ y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> r
     <aside class="nota">📝 Existen <code>&lt;b&gt;</code> y <code>&lt;i&gt;</code> que se ven igual, pero <code>&lt;strong&gt;</code> y <code>&lt;em&gt;</code> son preferibles porque transmiten <em>significado</em>, no solo apariencia.</aside>
   </article>
 
-  <!-- ════════════════ LISTAS ════════════════ -->
+
   <h2 class="separador" data-cat="listas">Listas</h2>
 
   <article class="ficha" data-cat="listas" data-tag="ul ol li lista ordenada desordenada viñetas" style="--cat:var(--cat-listas)">
@@ -531,7 +543,7 @@ y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> r
     </div>
   </article>
 
-  <!-- ════════════════ ENLACES Y MEDIOS ════════════════ -->
+ 
   <h2 class="separador" data-cat="medios">Enlaces y medios</h2>
 
   <article class="ficha" data-cat="medios" data-tag="a enlace link href ancla" style="--cat:var(--cat-medios)">
@@ -653,7 +665,7 @@ y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> r
     <aside class="nota">⚠️ No todos los sitios se dejan incrustar: algunos lo bloquean por seguridad y el iframe aparece vacío o con error. YouTube, Maps y Google Forms sí lo permiten.</aside>
   </article>
 
-  <!-- ════════════════ TABLAS ════════════════ -->
+
   <h2 class="separador" data-cat="tablas">Tablas</h2>
 
   <article class="ficha" data-cat="tablas" data-tag="table tr td th thead tbody tabla fila celda" style="--cat:var(--cat-tablas)">
@@ -684,7 +696,7 @@ y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> r
     </div>
   </article>
 
-  <!-- ════════════════ FORMULARIOS ════════════════ -->
+
   <h2 class="separador" data-cat="forms">Formularios</h2>
 
   <article class="ficha" data-cat="forms" data-tag="form input label placeholder type formulario" style="--cat:var(--cat-forms)">
@@ -843,14 +855,14 @@ y llega <span class="t">&lt;em&gt;</span>muy<span class="t">&lt;/em&gt;</span> r
     </div>
   </article>
 
-  <!-- Mensaje si la búsqueda no encuentra nada -->
+
   <div id="sinResultados">
     <p>😅 No encontramos ninguna etiqueta con ese nombre.</p>
     <p style="font-size:.85rem">Probá con otro término: <code>img</code>, <code>lista</code>, <code>form</code>…</p>
   </div>
 </main>
 
-<!-- <footer>: cierre del documento -->
+
 <footer class="pie">
   <p>Guía de referencia de <code>&lt;HTML&gt;</code> Desarrollado con ❤️ Profe Vanesa</p>
 </footer>
